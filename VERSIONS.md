@@ -1,7 +1,7 @@
 # Dependencies & Versions
 
 Software dependencies of the analysis code, the exact versions used, and the
-scripts that import them. Intended for readers who want to recreate the workflow.
+scripts that import them. 
 
 All versions below were used with:
 - **Python**: **3.10.19**
