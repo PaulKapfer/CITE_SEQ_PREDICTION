@@ -6,7 +6,7 @@ Analysis code for the publication
 
 These scripts are copied directly from the production analysis tree and lightly documented (added headers, per-block comments). No algorithmic decisions were changed; every step is consistent with the methods description. The Code produces statistical evaluations in intermediate steps for exploratory purposes which are not used in the final publication. Statistical tests and results used for publication are mentioned in the methods description.
 
-**Python 3.10.19 · R 4.3.3**
+**Python 3.13.9 · R 4.3.3**
 
 ---
 
@@ -14,8 +14,10 @@ These scripts are copied directly from the production analysis tree and lightly 
 
 ```
 Files2/
-├── 01_rna_fm_embeddings/            RNA-FM transcript embeddings (Python)
-├── 02_annotation/                   CellTypist annotation + validation (Python)
+├── 01_annotation/                   Cell-type annotation + validation (Python + R)
+│   ├── Hao/                          Reference dataset (Hao et al. 2021)
+│   └── Kotliarov/                    Transfer dataset (Kotliarov et al. 2020)
+├── 02_rna_fm_embeddings/            RNA-FM transcript embeddings (Python)
 ├── 03_training_data_preparation/    Prepare the data table used for XGBoost training (Python)
 ├── 04_hyperparameter_tuning/        Optuna XGBoost search (Python)
 ├── 05_model_training/               Full-model training & cross-validation (Within-dataset; Python)
@@ -37,25 +39,44 @@ Files2/
 ## Scripts, in execution order
 
 The pipeline has two independent inputs that feed model training:
-**(A)** per-gene RNA-FM embeddings (step 01) and **(B)** the per-cell reference
-table (steps 02–03: annotation → reference preparation). Steps 04–07 consume
-both. Steps 08–10 are downstream analysis/validation/plotting.
+**(A)** the per-cell reference table (steps 01 & 03: annotation → reference
+preparation) and **(B)** per-gene RNA-FM embeddings (step 02). Steps 04–07
+consume both. Steps 08–10 are downstream analysis/validation/plotting.
 
-### 01 · RNA-FM transcript embeddings
-`01_rna_fm_embeddings/rnafm_features_final_run.py` (Python)
+### 01 · Cell-type annotation & validation
+`01_annotation/` (Python + R) — a four-stage Scanpy pipeline, run separately for
+the **Hao** reference (`Hao/`) and the **Kotliarov** transfer dataset
+(`Kotliarov/`). Each stage chains into the next via a saved `.h5ad`; the CITE-seq
+ADT (surface protein) matrix is carried alongside the cells in `obsm` throughout.
+
+1. `1.QC+doublet_detection.py` — QC metrics (mito/ribo/hemoglobin %, gene/UMI
+   thresholds), per-sample Scrublet doublet removal.
+2. `2.HVG+PCA.py` — normalisation (target 1e4 → log1p), 2,000 highly variable
+   genes (`seurat_v3`), scaling, PCA (50 PCs).
+3. `3.batch+clustering.py` — Harmony batch correction across samples, neighbour
+   graph, UMAP, Leiden clustering at several resolutions.
+4. `4.Annotation+validation.py` — de-novo annotation with CellTypist
+   (`Immune_All_Low`, majority voting, confidence 0.5), validated against
+   canonical RNA markers (DE + cross-tabulation vs Leiden res-0.8 clusters,
+   ≥70 % purity) and measured ADT markers (T-cell dot-plots). Fine subtypes are
+   merged into broad classes; for the Hao **reference** ambiguous populations are
+   dropped (HSC/MPP, megakaryocytes/platelets, ILC3), whereas the Kotliarov
+   **transfer** dataset retains all predicted types.
+
+The Kotliarov dataset additionally needs `0.export_rds_to_mtx.R`, a one-time step
+that converts its legacy Seurat v2 `.RDS` (RNA + CITE assays + metadata) into
+plain MatrixMarket/CSV files so the Python loader runs without an embedded R
+session. **Output (per dataset):** `adata_annotated.h5ad`,
+`cell_type_assignments.csv`. The Hao output feeds step 03; the Kotliarov output
+feeds step 09.
+
+### 02 · RNA-FM transcript embeddings
+`02_rna_fm_embeddings/rnafm_features_final_run.py` (Python)
 Maps each target gene to its MANE Select (canonical fallback) transcript via the
 Ensembl REST API, fetches the cDNA, converts T→U, and runs RNA-FM (`rna_fm_t12`,
 layer 12, 640-dim; positional table extended to 16,000 nt by periodic tiling).
 Mean-pools over nucleotide positions (excluding `<cls>`/`<eos>`) → one `.npy`
 embedding per gene. **Output:** `rnafm_features/<gene>.npy` (+ `metadata.csv`).
-
-### 02 · Cell-type annotation & validation
-`02_annotation/4.Annotation+validation.py` (Python)
-De-novo annotation with CellTypist (`Immune_All_Low`, majority voting,
-confidence 0.5), validated against canonical markers (DE + cross-tabulation vs
-Leiden res-0.8 clusters, ≥70 % purity). Merges fine subtypes into broad classes
-and drops ambiguous populations (HSC/MPP, megakaryocytes/platelets, ILC3).
-**Output:** `adata_annotated.h5ad`, `cell_type_assignments.csv`.
 
 ### 03 · Training-data preparation
 `03_training_data_preparation/reference_preparation.py` (Python)
@@ -65,7 +86,7 @@ table and saves all artefacts needed to project new cells. Computes: log-norm
 (25 DCs) with 25,000 Nyström landmarks; HVG-PCA (5,000 HVGs → 50 PCs, scalers +
 loadings saved); endocytosis RRS — a custom UCell-inspired rank score, **not** the
 UCell/pyUCell package (40 GO:BP gene sets, rank cap 1,500);
-CLR-normalised ADT. **Input:** `adata_annotated.h5ad` (from step 02).
+CLR-normalised ADT. **Input:** `adata_annotated.h5ad` (from step 01).
 **Output:** `reference_data.parquet` + `RPG_diffmap/`, `HVG_PCA/` artefacts.
 
 ### 04 · Hyperparameter optimisation

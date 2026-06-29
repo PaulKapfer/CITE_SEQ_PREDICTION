@@ -49,13 +49,13 @@ print(f"  {adata.n_obs:,} cells  ×  {adata.n_vars:,} genes")
 
 # ── 1a. Print ADT proteins ─────────────────────────────────────────────────────
 print(f"  obsm keys: {list(adata.obsm.keys())}")
-if "ADT" in adata.obsm and isinstance(adata.obsm["ADT"], pd.DataFrame):
-    adt_proteins = list(adata.obsm["ADT"].columns)
+if "protein_counts" in adata.obsm and isinstance(adata.obsm["protein_counts"], pd.DataFrame):
+    adt_proteins = list(adata.obsm["protein_counts"].columns)
     print(f"\n  ADT proteins ({len(adt_proteins)} total):")
     for p in adt_proteins:
         print(f"    {p}")
 else:
-    print("  No ADT DataFrame found in obsm['ADT']")
+    print("  No ADT DataFrame found in obsm['protein_counts']")
 
 # ── 2. Run External_Validation_Package pipeline ──────────────────────────────────────────────
 sys.path.insert(0, r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Second_Dataset\package")
@@ -85,6 +85,20 @@ print("  Done.")
 # Export all matrices and metadata to flat files (CSV / MatrixMarket) so the
 # downstream R evaluation script can assemble a Seurat object without depending on Python.
 print(f"\nExporting for R -> {EXPORT_DIR}")
+
+# Remove stale CSV files from previous runs to prevent dimension mismatches
+_stale = [
+    "obsm_ADT_measured.csv", "obsm_ADT_pred_known.csv",
+    "obsm_ADT_pred_unknown.csv", "obsm_ADT_pred_known_from_unknown.csv",
+    "obsm_umap.csv", "obsm_pca_harmony.csv",
+    "obsm_External_Validation_Package_pca.csv",
+    "obsm_External_Validation_Package_diffmap.csv",
+]
+for _f in _stale:
+    _fp = os.path.join(EXPORT_DIR, _f)
+    if os.path.exists(_fp):
+        os.remove(_fp)
+        print(f"  Removed stale: {_f}")
 
 # 4a. Cell barcodes and gene names
 pd.Series(adata.obs_names, name="barcode").to_csv(

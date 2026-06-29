@@ -36,6 +36,10 @@ read_obsm <- function(filename) {
   fp <- file.path(export_dir, filename)
   if (!file.exists(fp)) { message("  not found: ", filename); return(NULL) }
   df <- read.csv(fp, row.names = 1, check.names = FALSE)
+  if (nrow(df) != length(barcodes)) {
+    message("  SKIPPED stale file (", nrow(df), " rows, expected ", length(barcodes), "): ", filename)
+    return(NULL)
+  }
   cat(sprintf("  %-40s %d x %d\n", filename, nrow(df), ncol(df)))
   df
 }

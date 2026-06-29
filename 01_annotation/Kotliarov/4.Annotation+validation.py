@@ -41,8 +41,8 @@ sc.settings.set_figure_params(dpi=100, facecolor='white')
 # CONFIGURATION
 # ============================================================================
 
-INPUT_FILE = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Hao/3.batch+clustering/adata_batch_clustered.h5ad"
-OUTPUT_DIR = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Hao/4.Annotation+validation")
+INPUT_FILE = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/3.batch+clustering/adata_batch_clustered.h5ad"
+OUTPUT_DIR = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/4.Annotation+validation")
 FIGURES_DIR = OUTPUT_DIR / "figures"
 
 # Create output directories
@@ -266,11 +266,8 @@ try:
     }
     adata.obs['celltype_final'] = adata.obs['celltype_final'].replace(type_mapping)
 
-    # Remove unwanted cell types
-    REMOVE_TYPES = {'HSC/MPP', 'Megakaryocytes/platelets', 'ILC3'}
-    n_before = adata.n_obs
-    adata = adata[~adata.obs['celltype_final'].isin(REMOVE_TYPES)].copy()
-    print(f"Removed {n_before - adata.n_obs} cells classified as: {REMOVE_TYPES}")
+    # NOTE: No cell types are removed for the Kotliarov dataset. All predicted
+    # populations (including small / rare ones) are retained.
 
     print("\nCell type distribution after merging:")
     print(adata.obs['celltype_final'].value_counts())

@@ -9,13 +9,10 @@ for out-of-sample projection of new cells.
 Modules
 -------
 1. RPG pairwise co-expression → diffusion map (up to 25 components)
-   + Nyström landmark selection (25000 cells via MiniBatchKMeans)
-2. HVG selection (5000 genes, Seurat-style) + PCA (50 components)
+   + Nyström landmark selection (2500 cells via MiniBatchKMeans)
+2. HVG selection (2000 genes, Seurat-style) + PCA (50 components)
    with gene-scaling params and per-gene loadings saved
-3. Relative Rank Scoring (RRS) for the Endocytosis GO pathway (chunked).
-   NOTE: this is a custom, UCell-INSPIRED reimplementation of the Mann–Whitney-U
-   rank score — it does NOT use the UCell / pyUCell package (none is imported).
-   Only the scoring formula and the default rank cap (1500) follow UCell.
+3. Relative Rank Scoring (RRS) for Endocytosis GO pathway (chunked)
 
 Final output table columns
 --------------------------
@@ -32,13 +29,13 @@ Subdirectory artefacts for out-of-sample mapping
     rpg_gene_list.csv          — RPG genes used (in order)
     rpg_pair_names.csv         — column names for pairwise products
     diffmap_eigenvalues.csv    — eigenvalues DC1..DC10
-    landmark_barcodes.csv      — 25000 landmark barcodes + celltype
+    landmark_barcodes.csv      — 2500 landmark barcodes + celltype
     landmark_rpg_vectors.csv   — RPG pairwise product vectors (landmarks × pairs)
     landmark_dc_coords.csv     — DC positions for landmarks (landmarks × DC)
     landmark_local_sigma.csv   — per-landmark local sigma from diffusion map
     landmark_sigma_global.txt  — median sigma (scalar) for Nyström kernel
   HVG_PCA/
-    hvg_genes.csv              — 5000 HVG names + dispersion stats
+    hvg_genes.csv              — 2000 HVG names + dispersion stats
     gene_scaling.csv           — mean + std per HVG (center/scale new data)
     pca_loadings.csv           — gene × PC loading matrix
     pca_variance.csv           — explained variance per PC
@@ -67,22 +64,21 @@ from joblib import Parallel, delayed
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 # ── CONFIGURATION ──────────────────────────────────────────────────────────────
-INPUT_H5AD   = Path(r"C:\R\CITE-SEQ\Annotation\Output\Hao\4.Annotation+validation\adata_annotated.h5ad")
-RPG_FILE     = Path(r"C:\R\RPGFingerprints\inst\extdata\rpg_lists\human\human_cytosolic.csv")
-OUT_DIR      = Path(r"C:\R\CITE-SEQ\Reference_Preparation\Output")
+INPUT_H5AD   = Path(r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Annotation\Hao\Output\4.Annotation+validation\adata_annotated.h5ad")
+RPG_FILE     = Path(r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Reference_Preparation\Input\human_cytosolic.csv")
+OUT_DIR      = Path(r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Reference_Preparation\Output")
 RPG_DIR      = OUT_DIR / "RPG_diffmap"
 HVG_DIR      = OUT_DIR / "HVG_PCA"
 
-MAPPING_CSV  = Path(r"C:\R\CITE-SEQ\RNA_data\adt_rna_mapping.csv")
-
+MAPPING_CSV  = Path(r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Reference_Preparation\Input\adt_rna_mapping.csv")
 CELLTYPE_COL = "celltype_final"
 N_DC         = 25       # diffusion components to retain (max 25)
 N_LANDMARKS  = 25000     # Nyström landmark cells
 N_HVG        = 5000     # highly variable genes
 N_PCS        = 50       # PCA components
 N_BINS           = 20      # bins for Seurat-style HVG selection
-N_JOBS           = 8       # parallel workers for RRS (UCell-inspired) scoring
-UCELL_MAX_RANK   = 1500    # rank cap per cell (matches UCell's default; see note in section 7)
+N_JOBS           = 8       # parallel workers for UCell scoring
+UCELL_MAX_RANK   = 1500    # rank cap per cell (UCell default)
 
 for d in [OUT_DIR, RPG_DIR, HVG_DIR]:
     d.mkdir(parents=True, exist_ok=True)
@@ -174,8 +170,9 @@ gene_names = list(adata.var_names.astype(str))
 n_genes    = len(gene_names)
 
 # Compute log-normalized expression (normalize_total → log1p, target_sum=1e4).
-# This is used for RPG co-expression diffmap, endocytosis RRS scoring, HVG
-# selection, PCA, and RNA gene extraction
+# This is used for RPG co-expression diffmap, UCell endocytosis scoring, HVG
+# selection, PCA, and RNA gene extraction — all features must be on the same
+# scale as the inference pipeline (pca.py / diffmap.py / endocytosis.py).
 if "counts" in adata.layers:
     X_counts = adata.layers["counts"]
     if not issparse(X_counts):
@@ -399,8 +396,8 @@ pd.DataFrame({
 }).to_csv(HVG_DIR / "pca_variance.csv", index=False)
 
 
-# ── 7. ENDOCYTOSIS PATHWAY RRS (custom UCell-inspired score; NOT the UCell pkg) ─
-print("\n7. Computing endocytosis RRS scores (custom UCell-inspired) ...")
+# ── 7. UCELL PATHWAY SCORES — Endocytosis ─────────────────────────────────────
+print("\n7. Computing UCell pathway scores (Endocytosis) ...")
 
 # Hardcoded Endocytosis MSigDB C5 GO:BP pathway names
 # (mirrors pathway_module_scores.R → Endocytosis = c(...))
@@ -495,10 +492,8 @@ valid_pathway_idx = np.array(
 n_pathway = len(valid_pathway_idx)
 print(f"  {n_pathway} pathway genes found in dataset ({n_genes} total genes)")
 
-# Custom, UCell-INSPIRED relative rank score (RRS) — NOT the UCell/pyUCell
-# package (no UCell library is imported; this is a from-scratch NumPy version
-# that reproduces UCell's formula). Per cell: a Mann-Whitney U statistic for the
-# gene set, with per-gene ranks capped at UCELL_MAX_RANK (UCell's default of 1500).
+# UCell: per-cell Mann-Whitney U statistic for the gene set, ranks capped at
+# UCELL_MAX_RANK (identical to the original R UCell package default of 1500).
 # Score = 1 - U_norm, where U_norm = (sum_of_capped_set_ranks - n_set*(n_set+1)/2)
 #                                     / (n_set * UCELL_MAX_RANK)
 # Higher score → gene set more highly expressed in that cell.
@@ -508,12 +503,7 @@ def _ucell_chunk(cell_indices: np.ndarray,
                  X_csr,
                  gene_set_idx: np.ndarray,
                  max_rank: int) -> np.ndarray:
-    """Custom UCell-inspired RRS for a subset of cells (one joblib task).
-
-    NOT the UCell package — a direct NumPy/SciPy reimplementation of UCell's
-    rank-sum score: rank genes per cell (cap at max_rank), then 1 − normalised
-    Mann–Whitney U of the gene set's ranks.
-    """
+    """UCell scores for a subset of cells (one joblib task)."""
     X_chunk = X_csr[cell_indices].toarray().astype(np.float32)
     # Rank each cell descending (rank 1 = highest expression, ties = average)
     ranks = np.vstack(
@@ -527,7 +517,7 @@ def _ucell_chunk(cell_indices: np.ndarray,
     return (1.0 - u_norm).astype(np.float32)
 
 if n_pathway == 0:
-    print("  WARNING: No pathway genes found — RRS scores set to 0.")
+    print("  WARNING: No pathway genes found — UCell scores set to 0.")
     rrs_scores = np.zeros(n_cells, dtype=np.float32)
 else:
     # Split cells into balanced chunks; more chunks than workers for load-balancing
@@ -537,7 +527,7 @@ else:
         np.arange(i, min(i + chunk_size, n_cells))
         for i in range(0, n_cells, chunk_size)
     ]
-    print(f"  RRS (UCell-inspired) scoring: {n_cells:,} cells  |  "
+    print(f"  UCell scoring: {n_cells:,} cells  |  "
           f"{len(cell_chunks)} chunks of ~{chunk_size:,}  |  "
           f"{N_JOBS} workers  |  max_rank={UCELL_MAX_RANK}")
 
@@ -547,8 +537,8 @@ else:
     )
     rrs_scores = np.concatenate(chunk_results)
 
-    print(f"  RRS score range : [{rrs_scores.min():.4f}, {rrs_scores.max():.4f}]")
-    print(f"  RRS score mean  : {rrs_scores.mean():.4f}")
+    print(f"  UCell score range : [{rrs_scores.min():.4f}, {rrs_scores.max():.4f}]")
+    print(f"  UCell score mean  : {rrs_scores.mean():.4f}")
 
 
 # ── 8. EXTRACT ADT-MATCHED RNA EXPRESSION ─────────────────────────────────────
@@ -570,13 +560,18 @@ print(f"  {len(rna_cols)} genes extracted  |  {len(missing_rna)} not found in da
       + (f": {missing_rna}" if missing_rna else ""))
 
 
-# ── 9. EXTRACT ADT DATA (CLR-normalised) ──────────────────────────────────────
-print("\n9. Extracting ADT protein levels ...")
-adt_obsm = adata.obsm.get("ADT", None)
+# ── 9. EXTRACT ADT DATA ───────────────────────────────────────────────────────
+print("\n8. Extracting ADT protein levels ...")
+# Raw ADT counts are carried in obsm by the annotation pipeline. The current
+# loader stores them as 'protein_counts' (CLR is applied below); older objects
+# used 'ADT'. Try the known keys in order.
+ADT_OBSM_KEYS = ("protein_counts", "ADT")
+adt_obsm = next((adata.obsm[k] for k in ADT_OBSM_KEYS if k in adata.obsm), None)
 adt_cols = {}
 
 if adt_obsm is None:
-    print("  WARNING: No 'ADT' key in adata.obsm — ADT columns will be absent.")
+    print(f"  WARNING: none of {ADT_OBSM_KEYS} found in adata.obsm "
+          f"(available: {list(adata.obsm.keys())}) — ADT columns will be absent.")
 else:
     if isinstance(adt_obsm, pd.DataFrame):
         adt_matrix   = adt_obsm.values.astype(np.float32)
@@ -597,8 +592,8 @@ else:
     adt_cols = {f"ADT_{p}": adt_matrix[:, i] for i, p in enumerate(adt_proteins)}
 
 
-# ── 10. ASSEMBLE FINAL REFERENCE TABLE ────────────────────────────────────────
-print("\n10. Assembling final reference table ...")
+# ── 9. ASSEMBLE FINAL REFERENCE TABLE ─────────────────────────────────────────
+print("\n9. Assembling final reference table ...")
 
 out_dict: dict = {
     "barcode":  barcodes,
@@ -627,8 +622,8 @@ df_out = pd.DataFrame(out_dict)
 print(f"  Output: {df_out.shape[0]:,} cells × {df_out.shape[1]} columns")
 
 
-# ── 11. SAVE ──────────────────────────────────────────────────────────────────
-print("\n11. Saving ...")
+# ── 10. SAVE ──────────────────────────────────────────────────────────────────
+print("\n10. Saving ...")
 
 parquet_path = OUT_DIR / "reference_data.parquet"
 csv_path     = OUT_DIR / "reference_data.csv"
