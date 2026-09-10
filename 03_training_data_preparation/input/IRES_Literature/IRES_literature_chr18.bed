@@ -1,0 +1,10 @@
+track name="IRES_literature chr18" description="IRES_literature chr18" visibility=2 itemRgb="On"
+#chrom chromStart chromEnd name strand
+chr18 26862563 26862910 IRES_literature_NM_001364289.1_1_348 500 -
+chr18 26862556 26862839 IRES_literature_NM_001364289.1_72_355 500 -
+chr18 26862556 26862839 IRES_literature_NM_001364289.1_72_355 500 -
+chr18 26862556 26862839 IRES_literature_NM_001364289.1_72_355 500 -
+chr18 26862563 26862910 IRES_literature_NM_004028.4_1_348 500 -
+chr18 26862556 26862839 IRES_literature_NM_004028.4_72_355 500 -
+chr18 26862556 26862839 IRES_literature_NM_004028.4_72_355 500 -
+chr18 26862556 26862839 IRES_literature_NM_004028.4_72_355 500 -

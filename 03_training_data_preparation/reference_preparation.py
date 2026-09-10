@@ -9,8 +9,8 @@ for out-of-sample projection of new cells.
 Modules
 -------
 1. RPG pairwise co-expression → diffusion map (up to 25 components)
-   + Nyström landmark selection (2500 cells via MiniBatchKMeans)
-2. HVG selection (2000 genes, Seurat-style) + PCA (50 components)
+   + Nyström landmark selection (25000 cells via MiniBatchKMeans)
+2. HVG selection (5000 genes, Seurat-style) + PCA (50 components)
    with gene-scaling params and per-gene loadings saved
 3. Relative Rank Scoring (RRS) for Endocytosis GO pathway (chunked)
 
@@ -29,13 +29,13 @@ Subdirectory artefacts for out-of-sample mapping
     rpg_gene_list.csv          — RPG genes used (in order)
     rpg_pair_names.csv         — column names for pairwise products
     diffmap_eigenvalues.csv    — eigenvalues DC1..DC10
-    landmark_barcodes.csv      — 2500 landmark barcodes + celltype
+    landmark_barcodes.csv      — 25000 landmark barcodes + celltype
     landmark_rpg_vectors.csv   — RPG pairwise product vectors (landmarks × pairs)
     landmark_dc_coords.csv     — DC positions for landmarks (landmarks × DC)
     landmark_local_sigma.csv   — per-landmark local sigma from diffusion map
     landmark_sigma_global.txt  — median sigma (scalar) for Nyström kernel
   HVG_PCA/
-    hvg_genes.csv              — 2000 HVG names + dispersion stats
+    hvg_genes.csv              — 5000 HVG names + dispersion stats
     gene_scaling.csv           — mean + std per HVG (center/scale new data)
     pca_loadings.csv           — gene × PC loading matrix
     pca_variance.csv           — explained variance per PC
