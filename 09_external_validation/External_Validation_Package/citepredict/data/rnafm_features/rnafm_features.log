@@ -1,0 +1,677 @@
+12:37:03  INFO      =================================================================
+12:37:03  INFO      RNA-FM Feature Extraction — Final Run
+12:37:03  INFO      =================================================================
+12:37:03  INFO      ADT mapping : C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Matching_ADT_Transcript\Output2\combined_adt_mapping.csv
+12:37:03  INFO      Output      : C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features
+12:37:03  INFO      214 unique gene symbols loaded (from 214 ADT entries)
+12:37:03  INFO      No previous metadata.csv found — starting without a cache.
+12:37:03  INFO      
+Checking cache against pre-resolved transcripts (adt_rna_mapping_final3.csv) ...
+12:37:03  INFO        VTCN1          ENST00000369458  (needs sequence + embedding)
+12:37:03  INFO        C5AR2          ENST00000595464  (needs sequence + embedding)
+12:37:03  INFO        CDH11          ENST00000268603  (needs sequence + embedding)
+12:37:03  INFO        CCR10          ENST00000332438  (needs sequence + embedding)
+12:37:03  INFO        ICAM2          ENST00000579788  (needs sequence + embedding)
+12:37:03  INFO        ITGAE          ENST00000263087  (needs sequence + embedding)
+12:37:03  INFO        ENG            ENST00000373203  (needs sequence + embedding)
+12:37:03  INFO        VCAM1          ENST00000294728  (needs sequence + embedding)
+12:37:03  INFO        LAMP1          ENST00000332556  (needs sequence + embedding)
+12:37:03  INFO        CD109          ENST00000287097  (needs sequence + embedding)
+12:37:03  INFO        MPL            ENST00000372470  (needs sequence + embedding)
+12:37:03  INFO        NECTIN2        ENST00000252483  (needs sequence + embedding)
+12:37:03  INFO        CSF1R          ENST00000675795  (needs sequence + embedding)
+12:37:03  INFO        KIT            ENST00000288135  (needs sequence + embedding)
+12:37:03  INFO        IFNGR1         ENST00000367739  (needs sequence + embedding)
+12:37:03  INFO        ITGAL          ENST00000356798  (needs sequence + embedding)
+12:37:03  INFO        ITGAM          ENST00000544665  (needs sequence + embedding)
+12:37:03  INFO        ITGAX          ENST00000268296  (needs sequence + embedding)
+12:37:03  INFO        IL2RB          ENST00000216223  (needs sequence + embedding)
+12:37:03  INFO        IL3RA          ENST00000331035  (needs sequence + embedding)
+12:37:03  INFO        IL4R           ENST00000395762  (needs sequence + embedding)
+12:37:03  INFO        IL6R           ENST00000368485  (needs sequence + embedding)
+12:37:03  INFO        IL7R           ENST00000303115  (needs sequence + embedding)
+12:37:03  INFO        ANPEP          ENST00000300060  (needs sequence + embedding)
+12:37:03  INFO        PROM1          ENST00000447510  (needs sequence + embedding)
+12:37:03  INFO        TNFRSF4        ENST00000379236  (needs sequence + embedding)
+12:37:03  INFO        FLT3           ENST00000241453  (needs sequence + embedding)
+12:37:03  INFO        TNFRSF9        ENST00000377507  (needs sequence + embedding)
+12:37:03  INFO        SDC1           ENST00000254351  (needs sequence + embedding)
+12:37:03  INFO        CD14           ENST00000302014  (needs sequence + embedding)
+12:37:03  INFO        PDGFRA         ENST00000257290  (needs sequence + embedding)
+12:37:03  INFO        PDGFRB         ENST00000261799  (needs sequence + embedding)
+12:37:03  INFO        THBD           ENST00000377103  (needs sequence + embedding)
+12:37:03  INFO        F3             ENST00000334047  (needs sequence + embedding)
+12:37:03  INFO        CDH5           ENST00000341529  (needs sequence + embedding)
+12:37:03  INFO        MCAM           ENST00000264036  (needs sequence + embedding)
+12:37:03  INFO        FUT4           ENST00000358752  (needs sequence + embedding)
+12:37:03  INFO        CTLA4          ENST00000648405  (needs sequence + embedding)
+12:37:03  INFO        CD40LG         ENST00000370629  (needs sequence + embedding)
+12:37:03  INFO        PVR            ENST00000425690  (needs sequence + embedding)
+12:37:03  INFO        KIR2DL1        ENST00000336077  (needs sequence + embedding)
+12:37:03  INFO        KIR2DL3        ENST00000342376  (needs sequence + embedding)
+12:37:03  INFO        KIR3DL1        ENST00000391728  (needs sequence + embedding)
+12:37:03  INFO        KIR2DL5A       ENST00000612730  (needs sequence + embedding)
+12:37:03  INFO        FCGR3A         ENST00000443193  (needs sequence + embedding)
+12:37:03  INFO        KLRB1          ENST00000229402  (needs sequence + embedding)
+12:37:03  INFO        CD163          ENST00000432237  (needs sequence + embedding)
+12:37:03  INFO        CD164          ENST00000310786  (needs sequence + embedding)
+12:37:03  INFO        SIGLEC1        ENST00000344754  (needs sequence + embedding)
+12:37:03  INFO        L1CAM          ENST00000370060  (needs sequence + embedding)
+12:37:03  INFO        SIRPA          ENST00000358771  (needs sequence + embedding)
+12:37:03  INFO        CD177          ENST00000618265  (needs sequence + embedding)
+12:37:03  INFO        FASLG          ENST00000367721  (needs sequence + embedding)
+12:37:03  INFO        ITGB2          ENST00000652462  (needs sequence + embedding)
+12:37:03  INFO        CXCR4          ENST00000241393  (needs sequence + embedding)
+12:37:03  INFO        CXCR5          ENST00000292174  (needs sequence + embedding)
+12:37:03  INFO        CXCR6          ENST00000304552  (needs sequence + embedding)
+12:37:03  INFO        CD19           ENST00000538922  (needs sequence + embedding)
+12:37:03  INFO        CCR2           ENST00000445132  (needs sequence + embedding)
+12:37:03  INFO        CCR3           ENST00000395940  (needs sequence + embedding)
+12:37:03  INFO        CCR4           ENST00000330953  (needs sequence + embedding)
+12:37:03  INFO        CCR5           ENST00000292303  (needs sequence + embedding)
+12:37:03  INFO        CCR6           ENST00000341935  (needs sequence + embedding)
+12:37:03  INFO        CCR9           ENST00000357632  (needs sequence + embedding)
+12:37:03  INFO        CD1A           ENST00000289429  (needs sequence + embedding)
+12:37:03  INFO        CD1C           ENST00000368170  (needs sequence + embedding)
+12:37:03  INFO        CD1D           ENST00000674085  (needs sequence + embedding)
+12:37:03  INFO        CD2            ENST00000369478  (needs sequence + embedding)
+12:37:03  INFO        MS4A1          ENST00000345732  (needs sequence + embedding)
+12:37:03  INFO        CD200          ENST00000315711  (needs sequence + embedding)
+12:37:03  INFO        PROCR          ENST00000216968  (needs sequence + embedding)
+12:37:03  INFO        TEK            ENST00000380036  (needs sequence + embedding)
+12:37:03  INFO        ENPP3          ENST00000357639  (needs sequence + embedding)
+12:37:03  INFO        MSR1           ENST00000262101  (needs sequence + embedding)
+12:37:03  INFO        LY75           ENST00000263636  (needs sequence + embedding)
+12:37:03  INFO        MRC1           ENST00000569591  (needs sequence + embedding)
+12:37:03  INFO        CD207          ENST00000410009  (needs sequence + embedding)
+12:37:03  INFO        CD209          ENST00000315599  (needs sequence + embedding)
+12:37:03  INFO        CR2            ENST00000367057  (needs sequence + embedding)
+12:37:03  INFO        CD22           ENST00000085219  (needs sequence + embedding)
+12:37:03  INFO        LAG3           ENST00000203629  (needs sequence + embedding)
+12:37:03  INFO        CD226          ENST00000582621  (needs sequence + embedding)
+12:37:03  INFO        GYPA           ENST00000641688  (needs sequence + embedding)
+12:37:03  INFO        CD24           ENST00000606017  (needs sequence + embedding)
+12:37:03  INFO        ABCB1          ENST00000622132  (needs sequence + embedding)
+12:37:03  INFO        CD244          ENST00000368034  (needs sequence + embedding)
+12:37:03  INFO        IL2RA          ENST00000379959  (needs sequence + embedding)
+12:37:03  INFO        TNFSF4         ENST00000281834  (needs sequence + embedding)
+12:37:03  INFO        TNFSF10        ENST00000241261  (needs sequence + embedding)
+12:37:03  INFO        DPP4           ENST00000360534  (needs sequence + embedding)
+12:37:03  INFO        TNFRSF13B      ENST00000261652  (needs sequence + embedding)
+12:37:03  INFO        TNFRSF13C      ENST00000291232  (needs sequence + embedding)
+12:37:03  INFO        TNFRSF17       ENST00000053243  (needs sequence + embedding)
+12:37:03  INFO        CD27           ENST00000266557  (needs sequence + embedding)
+12:37:03  INFO        TNFRSF14       ENST00000355716  (needs sequence + embedding)
+12:37:03  INFO        NGFR           ENST00000172229  (needs sequence + embedding)
+12:37:03  INFO        BTLA           ENST00000334529  (needs sequence + embedding)
+12:37:03  INFO        PDCD1LG2       ENST00000397747  (needs sequence + embedding)
+12:37:03  INFO        CD274          ENST00000381577  (needs sequence + embedding)
+12:37:03  INFO        ICOSLG         ENST00000407780  (needs sequence + embedding)
+12:37:03  INFO        ICOS           ENST00000316386  (needs sequence + embedding)
+12:37:03  INFO        PDCD1          ENST00000334409  (needs sequence + embedding)
+12:37:03  INFO        CD28           ENST00000324106  (needs sequence + embedding)
+12:37:03  INFO        TLR4           ENST00000355622  (needs sequence + embedding)
+12:37:03  INFO        ITGB1          ENST00000302278  (needs sequence + embedding)
+12:37:03  INFO        PTGDR2         ENST00000332539  (needs sequence + embedding)
+12:37:03  INFO        CD3D           ENST00000300692  (needs sequence + embedding)
+12:37:03  INFO        CD3E           ENST00000361763  (needs sequence + embedding)
+12:37:03  INFO        TNFRSF8        ENST00000263932  (needs sequence + embedding)
+12:37:03  INFO        CLEC10A        ENST00000416562  (needs sequence + embedding)
+12:37:03  INFO        CLEC4C         ENST00000360345  (needs sequence + embedding)
+12:37:03  INFO        NRP1           ENST00000374867  (needs sequence + embedding)
+12:37:03  INFO        LAIR1          ENST00000391742  (needs sequence + embedding)
+12:37:03  INFO        FCRL3          ENST00000368184  (needs sequence + embedding)
+12:37:03  INFO        FCRL4          ENST00000271532  (needs sequence + embedding)
+12:37:03  INFO        FCRL5          ENST00000361835  (needs sequence + embedding)
+12:37:03  INFO        KDR            ENST00000263923  (needs sequence + embedding)
+12:37:03  INFO        PECAM1         ENST00000563924  (needs sequence + embedding)
+12:37:03  INFO        KLRK1          ENST00000240618  (needs sequence + embedding)
+12:37:03  INFO        SLAMF7         ENST00000368043  (needs sequence + embedding)
+12:37:03  INFO        CDH1           ENST00000261769  (needs sequence + embedding)
+12:37:03  INFO        CDH2           ENST00000269141  (needs sequence + embedding)
+12:37:03  INFO        NCR1           ENST00000291890  (needs sequence + embedding)
+12:37:03  INFO        NCR3           ENST00000340027  (needs sequence + embedding)
+12:37:03  INFO        ABCG2          ENST00000237612  (needs sequence + embedding)
+12:37:03  INFO        CD34           ENST00000310833  (needs sequence + embedding)
+12:37:03  INFO        ERBB2          ENST00000269571  (needs sequence + embedding)
+12:37:03  INFO        CR1            ENST00000367049  (needs sequence + embedding)
+12:37:03  INFO        TREM1          ENST00000244709  (needs sequence + embedding)
+12:37:03  INFO        TNFRSF18       ENST00000379268  (needs sequence + embedding)
+12:37:03  INFO        CD36           ENST00000447544  (needs sequence + embedding)
+12:37:03  INFO        HAVCR2         ENST00000307851  (needs sequence + embedding)
+12:37:03  INFO        CLEC9A         ENST00000355819  (needs sequence + embedding)
+12:37:03  INFO        CD38           ENST00000226279  (needs sequence + embedding)
+12:37:03  INFO        ENTPD1         ENST00000371205  (needs sequence + embedding)
+12:37:03  INFO        CD4            ENST00000011653  (needs sequence + embedding)
+12:37:03  INFO        CD40           ENST00000372285  (needs sequence + embedding)
+12:37:03  INFO        ITGA2B         ENST00000262407  (needs sequence + embedding)
+12:37:03  INFO        GP1BB          ENST00000366425  (needs sequence + embedding)
+12:37:03  INFO        SPN            ENST00000652691  (needs sequence + embedding)
+12:37:03  INFO        CD44           ENST00000428726  (needs sequence + embedding)
+12:37:03  INFO        PTPRC          ENST00000442510  (needs sequence + embedding)
+12:37:03  INFO        CD46           ENST00000367042  (needs sequence + embedding)
+12:37:03  INFO        CD47           ENST00000361309  (needs sequence + embedding)
+12:37:03  INFO        CD48           ENST00000368046  (needs sequence + embedding)
+12:37:03  INFO        ITGA1          ENST00000282588  (needs sequence + embedding)
+12:37:03  INFO        ITGA2          ENST00000296585  (needs sequence + embedding)
+12:37:03  INFO        ITGA4          ENST00000397033  (needs sequence + embedding)
+12:37:03  INFO        CD52           ENST00000374213  (needs sequence + embedding)
+12:37:03  INFO        ICAM1          ENST00000264832  (needs sequence + embedding)
+12:37:03  INFO        CD55           ENST00000367064  (needs sequence + embedding)
+12:37:03  INFO        NCAM1          ENST00000316851  (needs sequence + embedding)
+12:37:03  INFO        B3GAT1         ENST00000312527  (needs sequence + embedding)
+12:37:03  INFO        CD59           ENST00000642928  (needs sequence + embedding)
+12:37:03  INFO        ITGB3          ENST00000559488  (needs sequence + embedding)
+12:37:03  INFO        SELE           ENST00000333360  (needs sequence + embedding)
+12:37:03  INFO        SELP           ENST00000263686  (needs sequence + embedding)
+12:37:03  INFO        CD63           ENST00000257857  (needs sequence + embedding)
+12:37:03  INFO        FCGR1A         ENST00000369168  (needs sequence + embedding)
+12:37:03  INFO        CEACAM1        ENST00000161559  (needs sequence + embedding)
+12:37:03  INFO        CEACAM8        ENST00000244336  (needs sequence + embedding)
+12:37:03  INFO        CD68           ENST00000250092  (needs sequence + embedding)
+12:37:03  INFO        CD69           ENST00000228434  (needs sequence + embedding)
+12:37:03  INFO        CD70           ENST00000245903  (needs sequence + embedding)
+12:37:03  INFO        TFRC           ENST00000360110  (needs sequence + embedding)
+12:37:03  INFO        CD72           ENST00000259633  (needs sequence + embedding)
+12:37:03  INFO        NT5E           ENST00000257770  (needs sequence + embedding)
+12:37:03  INFO        CD79A          ENST00000221972  (needs sequence + embedding)
+12:37:03  INFO        CD79B          ENST00000006750  (needs sequence + embedding)
+12:37:03  INFO        CD8A           ENST00000283635  (needs sequence + embedding)
+12:37:03  INFO        CD80           ENST00000264246  (needs sequence + embedding)
+12:37:03  INFO        CD81           ENST00000263645  (needs sequence + embedding)
+12:37:03  INFO        CD83           ENST00000379153  (needs sequence + embedding)
+12:37:03  INFO        LILRA4         ENST00000291759  (needs sequence + embedding)
+12:37:03  INFO        CD86           ENST00000330540  (needs sequence + embedding)
+12:37:03  INFO        CD9            ENST00000009180  (needs sequence + embedding)
+12:37:03  INFO        THY1           ENST00000284240  (needs sequence + embedding)
+12:37:03  INFO        CD93           ENST00000246006  (needs sequence + embedding)
+12:37:03  INFO        FAS            ENST00000652046  (needs sequence + embedding)
+12:37:03  INFO        CD96           ENST00000352690  (needs sequence + embedding)
+12:37:03  INFO        SLC3A2         ENST00000338663  (needs sequence + embedding)
+12:37:03  INFO        CD99           ENST00000381192  (needs sequence + embedding)
+12:37:03  INFO        CLEC12A        ENST00000304361  (needs sequence + embedding)
+12:37:03  INFO        CLEC1B         ENST00000298527  (needs sequence + embedding)
+12:37:03  INFO        CX3CR1         ENST00000399220  (needs sequence + embedding)
+12:37:03  INFO        FOLR2          ENST00000298223  (needs sequence + embedding)
+12:37:03  INFO        LGALS9C        ENST00000328114  (needs sequence + embedding)
+12:37:03  INFO        IL6ST          ENST00000381298  (needs sequence + embedding)
+12:37:03  INFO        HLA-DRA        ENST00000395388  (needs sequence + embedding)
+12:37:03  INFO        IGHD           ENST00000390556  (needs sequence + embedding)
+12:37:03  INFO        IGHM           ENST00000637539  (needs sequence + embedding)
+12:37:03  INFO        ITGB7          ENST00000267082  (needs sequence + embedding)
+12:37:03  INFO        OLR1           ENST00000309539  (needs sequence + embedding)
+12:37:03  INFO        MERTK          ENST00000295408  (needs sequence + embedding)
+12:37:03  INFO        NOTCH1         ENST00000651671  (needs sequence + embedding)
+12:37:03  INFO        NOTCH3         ENST00000263388  (needs sequence + embedding)
+12:37:03  INFO        PDPN           ENST00000621990  (needs sequence + embedding)
+12:37:03  INFO        SIGLEC8        ENST00000321424  (needs sequence + embedding)
+12:37:03  INFO        TIGIT          ENST00000383671  (needs sequence + embedding)
+12:37:03  INFO        TIMD4          ENST00000274532  (needs sequence + embedding)
+12:37:03  INFO        CRLF2          ENST00000400841  (needs sequence + embedding)
+12:37:03  INFO        FLT4           ENST00000261937  (needs sequence + embedding)
+12:37:03  INFO        XCR1           ENST00000309285  (needs sequence + embedding)
+12:37:03  INFO        MME            ENST00000360490  (needs sequence + embedding)
+12:37:03  INFO        CXCR3          ENST00000373693  (needs sequence + embedding)
+12:37:03  INFO        CCR7           ENST00000246657  (needs sequence + embedding)
+12:37:03  INFO        FCGR2A         ENST00000271450  (needs sequence + embedding)
+12:37:03  INFO        CD33           ENST00000262262  (needs sequence + embedding)
+12:37:03  INFO        CD5            ENST00000347785  (needs sequence + embedding)
+12:37:03  INFO        SELL           ENST00000236147  (needs sequence + embedding)
+12:37:03  INFO        CD7            ENST00000312648  (needs sequence + embedding)
+12:37:03  INFO        HLA-A          ENST00000376809  (needs sequence + embedding)
+12:37:03  INFO        IGHA1          ENST00000641837  (needs sequence + embedding)
+12:37:03  INFO        KLRG1          ENST00000356986  (needs sequence + embedding)
+12:37:03  INFO      
+Loading RNA-FM model ...
+12:37:03  INFO        Device: cpu  |  PyTorch threads: 5
+12:37:05  INFO        Positional embeddings extended: 1026 -> 16002 rows
+12:37:05  INFO        Model: rna_fm_t12  (layer 12, dim 640)
+12:37:05  INFO      
+Fetching 214 cDNA sequence(s) via POST /sequence/id (50 per request) ...
+12:37:05  WARNING     HTTP 500 on POST /sequence/id — waiting 12.0s (attempt 1/5)
+12:38:11  WARNING     HTTP 500 on POST /sequence/id — waiting 12.0s (attempt 1/5)
+12:39:23  WARNING     network error (ReadTimeout) on POST /sequence/id — waiting 12.0s (attempt 2/5)
+12:40:01  WARNING     HTTP 503 on POST /sequence/id — waiting 12.0s (attempt 3/5)
+12:40:13  WARNING     HTTP 500 on POST /sequence/id — waiting 12.0s (attempt 4/5)
+12:41:22  WARNING     HTTP 500 on POST /sequence/id — waiting 12.0s (attempt 1/5)
+12:42:30  WARNING     HTTP 500 on POST /sequence/id — waiting 12.0s (attempt 1/5)
+12:43:42  WARNING     network error (ReadTimeout) on POST /sequence/id — waiting 12.0s (attempt 2/5)
+12:44:39  INFO      
+Computing embeddings ...
+12:44:39  INFO        [  1/214]  VTCN1           seq=2,605 nt  (ENST00000369458, canonical)
+12:44:43  INFO        [  1/214]  VTCN1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\VTCN1.npy]
+12:44:43  INFO        [  2/214]  C5AR2           seq=6,720 nt  (ENST00000595464, canonical)
+12:45:08  INFO        [  2/214]  C5AR2           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\C5AR2.npy]
+12:45:08  INFO        [  3/214]  CDH11           seq=6,722 nt  (ENST00000268603, canonical)
+12:45:32  INFO        [  3/214]  CDH11           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CDH11.npy]
+12:45:32  INFO        [  4/214]  CCR10           seq=1,773 nt  (ENST00000332438, canonical)
+12:45:34  INFO        [  4/214]  CCR10           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CCR10.npy]
+12:45:34  INFO        [  5/214]  ICAM2           seq=1,135 nt  (ENST00000579788, canonical)
+12:45:35  INFO        [  5/214]  ICAM2           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ICAM2.npy]
+12:45:35  INFO        [  6/214]  ITGAE           seq=3,803 nt  (ENST00000263087, canonical)
+12:45:44  INFO        [  6/214]  ITGAE           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGAE.npy]
+12:45:44  INFO        [  7/214]  ENG             seq=2,946 nt  (ENST00000373203, canonical)
+12:45:49  INFO        [  7/214]  ENG             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ENG.npy]
+12:45:49  INFO        [  8/214]  VCAM1           seq=3,101 nt  (ENST00000294728, canonical)
+12:45:54  INFO        [  8/214]  VCAM1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\VCAM1.npy]
+12:45:54  INFO        [  9/214]  LAMP1           seq=2,701 nt  (ENST00000332556, canonical)
+12:45:58  INFO        [  9/214]  LAMP1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\LAMP1.npy]
+12:45:58  INFO        [ 10/214]  CD109           seq=9,031 nt  (ENST00000287097, canonical)
+12:46:42  INFO        [ 10/214]  CD109           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD109.npy]
+12:46:42  INFO        [ 11/214]  MPL             seq=3,633 nt  (ENST00000372470, canonical)
+12:46:48  INFO        [ 11/214]  MPL             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\MPL.npy]
+12:46:48  INFO        [ 12/214]  NECTIN2         seq=2,690 nt  (ENST00000252483, canonical)
+12:46:52  INFO        [ 12/214]  NECTIN2         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\NECTIN2.npy]
+12:46:52  INFO        [ 13/214]  CSF1R           seq=3,820 nt  (ENST00000675795, canonical)
+12:46:58  INFO        [ 13/214]  CSF1R           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CSF1R.npy]
+12:46:58  INFO        [ 14/214]  KIT             seq=5,147 nt  (ENST00000288135, canonical)
+12:47:09  INFO        [ 14/214]  KIT             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\KIT.npy]
+12:47:09  INFO        [ 15/214]  IFNGR1          seq=2,074 nt  (ENST00000367739, canonical)
+12:47:12  INFO        [ 15/214]  IFNGR1          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\IFNGR1.npy]
+12:47:12  INFO        [ 16/214]  ITGAL           seq=5,129 nt  (ENST00000356798, canonical)
+12:47:23  INFO        [ 16/214]  ITGAL           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGAL.npy]
+12:47:23  INFO        [ 17/214]  ITGAM           seq=4,719 nt  (ENST00000544665, canonical)
+12:47:32  INFO        [ 17/214]  ITGAM           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGAM.npy]
+12:47:32  INFO        [ 18/214]  ITGAX           seq=4,663 nt  (ENST00000268296, canonical)
+12:47:42  INFO        [ 18/214]  ITGAX           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGAX.npy]
+12:47:42  INFO        [ 19/214]  IL2RB           seq=4,034 nt  (ENST00000216223, canonical)
+12:47:49  INFO        [ 19/214]  IL2RB           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\IL2RB.npy]
+12:47:49  INFO        [ 20/214]  IL3RA           seq=1,541 nt  (ENST00000331035, canonical)
+12:47:50  INFO        [ 20/214]  IL3RA           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\IL3RA.npy]
+12:47:50  INFO        [ 21/214]  IL4R            seq=3,624 nt  (ENST00000395762, canonical)
+12:47:56  INFO        [ 21/214]  IL4R            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\IL4R.npy]
+12:47:56  INFO        [ 22/214]  IL6R            seq=5,764 nt  (ENST00000368485, canonical)
+12:48:15  INFO        [ 22/214]  IL6R            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\IL6R.npy]
+12:48:15  INFO        [ 23/214]  IL7R            seq=4,584 nt  (ENST00000303115, canonical)
+12:48:24  INFO        [ 23/214]  IL7R            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\IL7R.npy]
+12:48:24  INFO        [ 24/214]  ANPEP           seq=3,662 nt  (ENST00000300060, canonical)
+12:48:30  INFO        [ 24/214]  ANPEP           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ANPEP.npy]
+12:48:30  INFO        [ 25/214]  PROM1           seq=4,021 nt  (ENST00000447510, canonical)
+12:48:37  INFO        [ 25/214]  PROM1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\PROM1.npy]
+12:48:37  INFO        [ 26/214]  TNFRSF4         seq=1,075 nt  (ENST00000379236, canonical)
+12:48:38  INFO        [ 26/214]  TNFRSF4         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TNFRSF4.npy]
+12:48:38  INFO        [ 27/214]  FLT3            seq=3,826 nt  (ENST00000241453, canonical)
+12:48:44  INFO        [ 27/214]  FLT3            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FLT3.npy]
+12:48:44  INFO        [ 28/214]  TNFRSF9         seq=5,872 nt  (ENST00000377507, canonical)
+12:49:03  INFO        [ 28/214]  TNFRSF9         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TNFRSF9.npy]
+12:49:03  INFO        [ 29/214]  SDC1            seq=3,165 nt  (ENST00000254351, canonical)
+12:49:08  INFO        [ 29/214]  SDC1            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\SDC1.npy]
+12:49:08  INFO        [ 30/214]  CD14            seq=1,356 nt  (ENST00000302014, canonical)
+12:49:10  INFO        [ 30/214]  CD14            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD14.npy]
+12:49:10  INFO        [ 31/214]  PDGFRA          seq=6,378 nt  (ENST00000257290, canonical)
+12:49:32  INFO        [ 31/214]  PDGFRA          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\PDGFRA.npy]
+12:49:32  INFO        [ 32/214]  PDGFRB          seq=5,700 nt  (ENST00000261799, canonical)
+12:49:51  INFO        [ 32/214]  PDGFRB          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\PDGFRB.npy]
+12:49:51  INFO        [ 33/214]  THBD            seq=4,040 nt  (ENST00000377103, canonical)
+12:49:58  INFO        [ 33/214]  THBD            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\THBD.npy]
+12:49:58  INFO        [ 34/214]  F3              seq=2,298 nt  (ENST00000334047, canonical)
+12:50:01  INFO        [ 34/214]  F3              -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\F3.npy]
+12:50:01  INFO        [ 35/214]  CDH5            seq=4,057 nt  (ENST00000341529, canonical)
+12:50:09  INFO        [ 35/214]  CDH5            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CDH5.npy]
+12:50:09  INFO        [ 36/214]  MCAM            seq=3,327 nt  (ENST00000264036, canonical)
+12:50:14  INFO        [ 36/214]  MCAM            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\MCAM.npy]
+12:50:14  INFO        [ 37/214]  FUT4            seq=5,975 nt  (ENST00000358752, canonical)
+12:50:34  INFO        [ 37/214]  FUT4            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FUT4.npy]
+12:50:34  INFO        [ 38/214]  CTLA4           seq=1,997 nt  (ENST00000648405, canonical)
+12:50:36  INFO        [ 38/214]  CTLA4           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CTLA4.npy]
+12:50:36  INFO        [ 39/214]  CD40LG          seq=1,852 nt  (ENST00000370629, canonical)
+12:50:38  INFO        [ 39/214]  CD40LG          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD40LG.npy]
+12:50:38  INFO        [ 40/214]  PVR             seq=5,792 nt  (ENST00000425690, canonical)
+12:50:57  INFO        [ 40/214]  PVR             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\PVR.npy]
+12:50:57  INFO        [ 41/214]  KIR2DL1         seq=1,614 nt  (ENST00000336077, canonical)
+12:50:59  INFO        [ 41/214]  KIR2DL1         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\KIR2DL1.npy]
+12:50:59  INFO        [ 42/214]  KIR2DL3         seq=1,592 nt  (ENST00000342376, canonical)
+12:51:01  INFO        [ 42/214]  KIR2DL3         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\KIR2DL3.npy]
+12:51:01  INFO        [ 43/214]  KIR3DL1         seq=1,871 nt  (ENST00000391728, canonical)
+12:51:03  INFO        [ 43/214]  KIR3DL1         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\KIR3DL1.npy]
+12:51:03  INFO        [ 44/214]  KIR2DL5A        seq=1,473 nt  (ENST00000612730, canonical)
+12:51:04  INFO        [ 44/214]  KIR2DL5A        -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\KIR2DL5A.npy]
+12:51:04  INFO        [ 45/214]  FCGR3A          seq=2,100 nt  (ENST00000443193, canonical)
+12:51:07  INFO        [ 45/214]  FCGR3A          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FCGR3A.npy]
+12:51:07  INFO        [ 46/214]  KLRB1           seq=1,478 nt  (ENST00000229402, canonical)
+12:51:08  INFO        [ 46/214]  KLRB1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\KLRB1.npy]
+12:51:08  INFO        [ 47/214]  CD163           seq=4,071 nt  (ENST00000432237, canonical)
+12:51:15  INFO        [ 47/214]  CD163           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD163.npy]
+12:51:15  INFO        [ 48/214]  CD164           seq=3,020 nt  (ENST00000310786, canonical)
+12:51:20  INFO        [ 48/214]  CD164           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD164.npy]
+12:51:20  INFO        [ 49/214]  SIGLEC1         seq=6,960 nt  (ENST00000344754, canonical)
+12:51:46  INFO        [ 49/214]  SIGLEC1         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\SIGLEC1.npy]
+12:51:46  INFO        [ 50/214]  L1CAM           seq=5,138 nt  (ENST00000370060, canonical)
+12:51:57  INFO        [ 50/214]  L1CAM           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\L1CAM.npy]
+12:51:57  INFO        [ 51/214]  SIRPA           seq=4,580 nt  (ENST00000358771, canonical)
+12:52:06  INFO        [ 51/214]  SIRPA           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\SIRPA.npy]
+12:52:06  INFO        [ 52/214]  CD177           seq=2,195 nt  (ENST00000618265, canonical)
+12:52:08  INFO        [ 52/214]  CD177           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD177.npy]
+12:52:08  INFO        [ 53/214]  FASLG           seq=1,805 nt  (ENST00000367721, canonical)
+12:52:10  INFO        [ 53/214]  FASLG           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FASLG.npy]
+12:52:10  INFO        [ 54/214]  ITGB2           seq=2,807 nt  (ENST00000652462, canonical)
+12:52:14  INFO        [ 54/214]  ITGB2           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGB2.npy]
+12:52:14  INFO        [ 55/214]  CXCR4           seq=1,668 nt  (ENST00000241393, canonical)
+12:52:16  INFO        [ 55/214]  CXCR4           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CXCR4.npy]
+12:52:16  INFO        [ 56/214]  CXCR5           seq=4,293 nt  (ENST00000292174, canonical)
+12:52:24  INFO        [ 56/214]  CXCR5           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CXCR5.npy]
+12:52:24  INFO        [ 57/214]  CXCR6           seq=1,968 nt  (ENST00000304552, canonical)
+12:52:26  INFO        [ 57/214]  CXCR6           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CXCR6.npy]
+12:52:26  INFO        [ 58/214]  CD19            seq=1,918 nt  (ENST00000538922, canonical)
+12:52:28  INFO        [ 58/214]  CD19            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD19.npy]
+12:52:28  INFO        [ 59/214]  CCR2            seq=3,531 nt  (ENST00000445132, canonical)
+12:52:34  INFO        [ 59/214]  CCR2            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CCR2.npy]
+12:52:34  INFO        [ 60/214]  CCR3            seq=1,638 nt  (ENST00000395940, canonical)
+12:52:36  INFO        [ 60/214]  CCR3            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CCR3.npy]
+12:52:36  INFO        [ 61/214]  CCR4            seq=3,025 nt  (ENST00000330953, canonical)
+12:52:40  INFO        [ 61/214]  CCR4            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CCR4.npy]
+12:52:40  INFO        [ 62/214]  CCR5            seq=3,358 nt  (ENST00000292303, canonical)
+12:52:45  INFO        [ 62/214]  CCR5            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CCR5.npy]
+12:52:45  INFO        [ 63/214]  CCR6            seq=3,136 nt  (ENST00000341935, canonical)
+12:52:50  INFO        [ 63/214]  CCR6            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CCR6.npy]
+12:52:50  INFO        [ 64/214]  CCR9            seq=2,527 nt  (ENST00000357632, canonical)
+12:52:53  INFO        [ 64/214]  CCR9            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CCR9.npy]
+12:52:53  INFO        [ 65/214]  CD1A            seq=1,809 nt  (ENST00000289429, canonical)
+12:52:55  INFO        [ 65/214]  CD1A            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD1A.npy]
+12:52:55  INFO        [ 66/214]  CD1C            seq=2,442 nt  (ENST00000368170, canonical)
+12:52:58  INFO        [ 66/214]  CD1C            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD1C.npy]
+12:52:58  INFO        [ 67/214]  CD1D            seq=3,492 nt  (ENST00000674085, canonical)
+12:53:04  INFO        [ 67/214]  CD1D            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD1D.npy]
+12:53:04  INFO        [ 68/214]  CD2             seq=1,565 nt  (ENST00000369478, canonical)
+12:53:05  INFO        [ 68/214]  CD2             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD2.npy]
+12:53:05  INFO        [ 69/214]  MS4A1           seq=3,556 nt  (ENST00000345732, canonical)
+12:53:11  INFO        [ 69/214]  MS4A1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\MS4A1.npy]
+12:53:11  INFO        [ 70/214]  CD200           seq=2,129 nt  (ENST00000315711, canonical)
+12:53:14  INFO        [ 70/214]  CD200           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD200.npy]
+12:53:14  INFO        [ 71/214]  PROCR           seq=1,349 nt  (ENST00000216968, canonical)
+12:53:15  INFO        [ 71/214]  PROCR           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\PROCR.npy]
+12:53:15  INFO        [ 72/214]  TEK             seq=4,683 nt  (ENST00000380036, canonical)
+12:53:24  INFO        [ 72/214]  TEK             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TEK.npy]
+12:53:24  INFO        [ 73/214]  ENPP3           seq=3,165 nt  (ENST00000357639, canonical)
+12:53:29  INFO        [ 73/214]  ENPP3           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ENPP3.npy]
+12:53:29  INFO        [ 74/214]  MSR1            seq=3,618 nt  (ENST00000262101, canonical)
+12:53:35  INFO        [ 74/214]  MSR1            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\MSR1.npy]
+12:53:35  INFO        [ 75/214]  LY75            seq=6,932 nt  (ENST00000263636, canonical)
+12:54:01  INFO        [ 75/214]  LY75            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\LY75.npy]
+12:54:01  INFO        [ 76/214]  MRC1            seq=5,188 nt  (ENST00000569591, canonical)
+12:54:17  INFO        [ 76/214]  MRC1            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\MRC1.npy]
+12:54:17  INFO        [ 77/214]  CD207           seq=1,866 nt  (ENST00000410009, canonical)
+12:54:19  INFO        [ 77/214]  CD207           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD207.npy]
+12:54:19  INFO        [ 78/214]  CD209           seq=4,284 nt  (ENST00000315599, canonical)
+12:54:27  INFO        [ 78/214]  CD209           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD209.npy]
+12:54:27  INFO        [ 79/214]  CR2             seq=4,139 nt  (ENST00000367057, canonical)
+12:54:34  INFO        [ 79/214]  CR2             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CR2.npy]
+12:54:34  INFO        [ 80/214]  CD22            seq=3,274 nt  (ENST00000085219, canonical)
+12:54:39  INFO        [ 80/214]  CD22            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD22.npy]
+12:54:39  INFO        [ 81/214]  LAG3            seq=1,976 nt  (ENST00000203629, canonical)
+12:54:42  INFO        [ 81/214]  LAG3            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\LAG3.npy]
+12:54:42  INFO        [ 82/214]  CD226           seq=12,518 nt  (ENST00000582621, canonical)
+12:56:00  INFO        [ 82/214]  CD226           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD226.npy]
+12:56:00  INFO        [ 83/214]  GYPA            seq=2,627 nt  (ENST00000641688, canonical)
+12:56:04  INFO        [ 83/214]  GYPA            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\GYPA.npy]
+12:56:04  INFO        [ 84/214]  CD24            seq=2,156 nt  (ENST00000606017, canonical)
+12:56:06  INFO        [ 84/214]  CD24            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD24.npy]
+12:56:06  INFO        [ 85/214]  ABCB1           seq=5,205 nt  (ENST00000622132, canonical)
+12:56:22  INFO        [ 85/214]  ABCB1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ABCB1.npy]
+12:56:22  INFO        [ 86/214]  CD244           seq=2,495 nt  (ENST00000368034, canonical)
+12:56:25  INFO        [ 86/214]  CD244           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD244.npy]
+12:56:25  INFO        [ 87/214]  IL2RA           seq=3,218 nt  (ENST00000379959, canonical)
+12:56:30  INFO        [ 87/214]  IL2RA           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\IL2RA.npy]
+12:56:30  INFO        [ 88/214]  TNFSF4          seq=3,492 nt  (ENST00000281834, canonical)
+12:56:36  INFO        [ 88/214]  TNFSF4          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TNFSF4.npy]
+12:56:36  INFO        [ 89/214]  TNFSF10         seq=1,876 nt  (ENST00000241261, canonical)
+12:56:38  INFO        [ 89/214]  TNFSF10         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TNFSF10.npy]
+12:56:38  INFO        [ 90/214]  DPP4            seq=3,573 nt  (ENST00000360534, canonical)
+12:56:44  INFO        [ 90/214]  DPP4            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\DPP4.npy]
+12:56:44  INFO        [ 91/214]  TNFRSF13B       seq=1,391 nt  (ENST00000261652, canonical)
+12:56:45  INFO        [ 91/214]  TNFRSF13B       -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TNFRSF13B.npy]
+12:56:45  INFO        [ 92/214]  TNFRSF13C       seq=3,923 nt  (ENST00000291232, canonical)
+12:56:52  INFO        [ 92/214]  TNFRSF13C       -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TNFRSF13C.npy]
+12:56:52  INFO        [ 93/214]  TNFRSF17        seq=891 nt  (ENST00000053243, canonical)
+12:56:52  INFO        [ 93/214]  TNFRSF17        -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TNFRSF17.npy]
+12:56:52  INFO        [ 94/214]  CD27            seq=1,245 nt  (ENST00000266557, canonical)
+12:56:54  INFO        [ 94/214]  CD27            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD27.npy]
+12:56:54  INFO        [ 95/214]  TNFRSF14        seq=1,702 nt  (ENST00000355716, canonical)
+12:56:55  INFO        [ 95/214]  TNFRSF14        -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TNFRSF14.npy]
+12:56:55  INFO        [ 96/214]  NGFR            seq=3,408 nt  (ENST00000172229, canonical)
+12:57:01  INFO        [ 96/214]  NGFR            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\NGFR.npy]
+12:57:01  INFO        [ 97/214]  BTLA            seq=3,126 nt  (ENST00000334529, canonical)
+12:57:05  INFO        [ 97/214]  BTLA            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\BTLA.npy]
+12:57:05  INFO        [ 98/214]  PDCD1LG2        seq=2,432 nt  (ENST00000397747, canonical)
+12:57:08  INFO        [ 98/214]  PDCD1LG2        -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\PDCD1LG2.npy]
+12:57:08  INFO        [ 99/214]  CD274           seq=3,634 nt  (ENST00000381577, canonical)
+12:57:14  INFO        [ 99/214]  CD274           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD274.npy]
+12:57:14  INFO        [100/214]  ICOSLG          seq=7,078 nt  (ENST00000407780, canonical)
+12:57:40  INFO        [100/214]  ICOSLG          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ICOSLG.npy]
+12:57:40  INFO        [101/214]  ICOS            seq=2,630 nt  (ENST00000316386, canonical)
+12:57:43  INFO        [101/214]  ICOS            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ICOS.npy]
+12:57:43  INFO        [102/214]  PDCD1           seq=2,097 nt  (ENST00000334409, canonical)
+12:57:46  INFO        [102/214]  PDCD1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\PDCD1.npy]
+12:57:46  INFO        [103/214]  CD28            seq=4,721 nt  (ENST00000324106, canonical)
+12:57:55  INFO        [103/214]  CD28            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD28.npy]
+12:57:55  INFO        [104/214]  TLR4            seq=12,677 nt  (ENST00000355622, canonical)
+12:59:21  INFO        [104/214]  TLR4            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TLR4.npy]
+12:59:21  INFO        [105/214]  ITGB1           seq=3,735 nt  (ENST00000302278, canonical)
+12:59:27  INFO        [105/214]  ITGB1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGB1.npy]
+12:59:27  INFO        [106/214]  PTGDR2          seq=2,881 nt  (ENST00000332539, canonical)
+12:59:31  INFO        [106/214]  PTGDR2          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\PTGDR2.npy]
+12:59:31  INFO        [107/214]  CD3D            seq=701 nt  (ENST00000300692, canonical)
+12:59:32  INFO        [107/214]  CD3D            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD3D.npy]
+12:59:32  INFO        [108/214]  CD3E            seq=1,361 nt  (ENST00000361763, canonical)
+12:59:33  INFO        [108/214]  CD3E            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD3E.npy]
+12:59:33  INFO        [109/214]  TNFRSF8         seq=3,760 nt  (ENST00000263932, canonical)
+12:59:39  INFO        [109/214]  TNFRSF8         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TNFRSF8.npy]
+12:59:39  INFO        [110/214]  CLEC10A         seq=1,660 nt  (ENST00000416562, canonical)
+12:59:41  INFO        [110/214]  CLEC10A         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CLEC10A.npy]
+12:59:41  INFO        [111/214]  CLEC4C          seq=882 nt  (ENST00000360345, canonical)
+12:59:42  INFO        [111/214]  CLEC4C          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CLEC4C.npy]
+12:59:42  INFO        [112/214]  NRP1            seq=5,640 nt  (ENST00000374867, canonical)
+13:00:00  INFO        [112/214]  NRP1            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\NRP1.npy]
+13:00:00  INFO        [113/214]  LAIR1           seq=4,875 nt  (ENST00000391742, canonical)
+13:00:10  INFO        [113/214]  LAIR1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\LAIR1.npy]
+13:00:10  INFO        [114/214]  FCRL3           seq=4,638 nt  (ENST00000368184, canonical)
+13:00:19  INFO        [114/214]  FCRL3           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FCRL3.npy]
+13:00:19  INFO        [115/214]  FCRL4           seq=3,466 nt  (ENST00000271532, canonical)
+13:00:24  INFO        [115/214]  FCRL4           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FCRL4.npy]
+13:00:24  INFO        [116/214]  FCRL5           seq=5,385 nt  (ENST00000361835, canonical)
+13:00:41  INFO        [116/214]  FCRL5           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FCRL5.npy]
+13:00:41  INFO        [117/214]  KDR             seq=5,833 nt  (ENST00000263923, canonical)
+13:01:00  INFO        [117/214]  KDR             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\KDR.npy]
+13:01:00  INFO        [118/214]  PECAM1          seq=6,813 nt  (ENST00000563924, canonical)
+13:01:26  INFO        [118/214]  PECAM1          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\PECAM1.npy]
+13:01:26  INFO        [119/214]  KLRK1           seq=1,576 nt  (ENST00000240618, canonical)
+13:01:27  INFO        [119/214]  KLRK1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\KLRK1.npy]
+13:01:27  INFO        [120/214]  SLAMF7          seq=2,707 nt  (ENST00000368043, canonical)
+13:01:31  INFO        [120/214]  SLAMF7          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\SLAMF7.npy]
+13:01:31  INFO        [121/214]  CDH1            seq=4,811 nt  (ENST00000261769, canonical)
+13:01:41  INFO        [121/214]  CDH1            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CDH1.npy]
+13:01:41  INFO        [122/214]  CDH2            seq=4,016 nt  (ENST00000269141, canonical)
+13:01:48  INFO        [122/214]  CDH2            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CDH2.npy]
+13:01:48  INFO        [123/214]  NCR1            seq=1,157 nt  (ENST00000291890, canonical)
+13:01:49  INFO        [123/214]  NCR1            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\NCR1.npy]
+13:01:49  INFO        [124/214]  NCR3            seq=1,063 nt  (ENST00000340027, canonical)
+13:01:50  INFO        [124/214]  NCR3            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\NCR3.npy]
+13:01:50  INFO        [125/214]  ABCG2           seq=4,206 nt  (ENST00000237612, canonical)
+13:01:57  INFO        [125/214]  ABCG2           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ABCG2.npy]
+13:01:57  INFO        [126/214]  CD34            seq=7,969 nt  (ENST00000310833, canonical)
+13:02:32  INFO        [126/214]  CD34            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD34.npy]
+13:02:32  INFO        [127/214]  ERBB2           seq=4,557 nt  (ENST00000269571, canonical)
+13:02:41  INFO        [127/214]  ERBB2           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ERBB2.npy]
+13:02:41  INFO        [128/214]  CR1             seq=9,937 nt  (ENST00000367049, canonical)
+13:03:33  INFO        [128/214]  CR1             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CR1.npy]
+13:03:33  INFO        [129/214]  TREM1           seq=3,252 nt  (ENST00000244709, canonical)
+13:03:38  INFO        [129/214]  TREM1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TREM1.npy]
+13:03:38  INFO        [130/214]  TNFRSF18        seq=1,083 nt  (ENST00000379268, canonical)
+13:03:39  INFO        [130/214]  TNFRSF18        -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TNFRSF18.npy]
+13:03:39  INFO        [131/214]  CD36            seq=4,598 nt  (ENST00000447544, canonical)
+13:03:48  INFO        [131/214]  CD36            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD36.npy]
+13:03:48  INFO        [132/214]  HAVCR2          seq=2,237 nt  (ENST00000307851, canonical)
+13:03:51  INFO        [132/214]  HAVCR2          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\HAVCR2.npy]
+13:03:51  INFO        [133/214]  CLEC9A          seq=1,733 nt  (ENST00000355819, canonical)
+13:03:52  INFO        [133/214]  CLEC9A          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CLEC9A.npy]
+13:03:52  INFO        [134/214]  CD38            seq=5,620 nt  (ENST00000226279, canonical)
+13:04:10  INFO        [134/214]  CD38            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD38.npy]
+13:04:10  INFO        [135/214]  ENTPD1          seq=12,493 nt  (ENST00000371205, canonical)
+13:05:33  INFO        [135/214]  ENTPD1          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ENTPD1.npy]
+13:05:33  INFO        [136/214]  CD4             seq=3,049 nt  (ENST00000011653, canonical)
+13:05:38  INFO        [136/214]  CD4             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD4.npy]
+13:05:38  INFO        [137/214]  CD40            seq=1,682 nt  (ENST00000372285, canonical)
+13:05:40  INFO        [137/214]  CD40            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD40.npy]
+13:05:40  INFO        [138/214]  ITGA2B          seq=3,479 nt  (ENST00000262407, canonical)
+13:05:45  INFO        [138/214]  ITGA2B          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGA2B.npy]
+13:05:45  INFO        [139/214]  GP1BB           seq=959 nt  (ENST00000366425, canonical)
+13:05:46  INFO        [139/214]  GP1BB           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\GP1BB.npy]
+13:05:46  INFO        [140/214]  SPN             seq=7,252 nt  (ENST00000652691, canonical)
+13:06:15  INFO        [140/214]  SPN             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\SPN.npy]
+13:06:15  INFO        [141/214]  CD44            seq=5,431 nt  (ENST00000428726, canonical)
+13:06:32  INFO        [141/214]  CD44            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD44.npy]
+13:06:32  INFO        [142/214]  PTPRC           seq=5,357 nt  (ENST00000442510, canonical)
+13:06:48  INFO        [142/214]  PTPRC           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\PTPRC.npy]
+13:06:48  INFO        [143/214]  CD46            seq=3,320 nt  (ENST00000367042, canonical)
+13:06:53  INFO        [143/214]  CD46            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD46.npy]
+13:06:53  INFO        [144/214]  CD47            seq=5,292 nt  (ENST00000361309, canonical)
+13:07:09  INFO        [144/214]  CD47            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD47.npy]
+13:07:09  INFO        [145/214]  CD48            seq=1,097 nt  (ENST00000368046, canonical)
+13:07:10  INFO        [145/214]  CD48            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD48.npy]
+13:07:10  INFO        [146/214]  ITGA1           seq=10,736 nt  (ENST00000282588, canonical)
+13:08:11  INFO        [146/214]  ITGA1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGA1.npy]
+13:08:11  INFO        [147/214]  ITGA2           seq=7,843 nt  (ENST00000296585, canonical)
+13:08:44  INFO        [147/214]  ITGA2           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGA2.npy]
+13:08:44  INFO        [148/214]  ITGA4           seq=6,781 nt  (ENST00000397033, canonical)
+13:09:09  INFO        [148/214]  ITGA4           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGA4.npy]
+13:09:09  INFO        [149/214]  CD52            seq=467 nt  (ENST00000374213, canonical)
+13:09:09  INFO        [149/214]  CD52            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD52.npy]
+13:09:09  INFO        [150/214]  ICAM1           seq=2,967 nt  (ENST00000264832, canonical)
+13:09:14  INFO        [150/214]  ICAM1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ICAM1.npy]
+13:09:14  INFO        [151/214]  CD55            seq=2,590 nt  (ENST00000367064, canonical)
+13:09:17  INFO        [151/214]  CD55            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD55.npy]
+13:09:17  INFO        [152/214]  NCAM1           seq=5,819 nt  (ENST00000316851, canonical)
+13:09:36  INFO        [152/214]  NCAM1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\NCAM1.npy]
+13:09:36  INFO        [153/214]  B3GAT1          seq=3,976 nt  (ENST00000312527, canonical)
+13:09:43  INFO        [153/214]  B3GAT1          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\B3GAT1.npy]
+13:09:43  INFO        [154/214]  CD59            seq=7,563 nt  (ENST00000642928, canonical)
+13:10:14  INFO        [154/214]  CD59            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD59.npy]
+13:10:14  INFO        [155/214]  ITGB3           seq=5,941 nt  (ENST00000559488, canonical)
+13:10:34  INFO        [155/214]  ITGB3           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGB3.npy]
+13:10:34  INFO        [156/214]  SELE            seq=3,875 nt  (ENST00000333360, canonical)
+13:10:41  INFO        [156/214]  SELE            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\SELE.npy]
+13:10:41  INFO        [157/214]  SELP            seq=3,157 nt  (ENST00000263686, canonical)
+13:10:46  INFO        [157/214]  SELP            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\SELP.npy]
+13:10:46  INFO        [158/214]  CD63            seq=1,023 nt  (ENST00000257857, canonical)
+13:10:46  INFO        [158/214]  CD63            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD63.npy]
+13:10:46  INFO        [159/214]  FCGR1A          seq=1,333 nt  (ENST00000369168, canonical)
+13:10:48  INFO        [159/214]  FCGR1A          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FCGR1A.npy]
+13:10:48  INFO        [160/214]  CEACAM1         seq=3,491 nt  (ENST00000161559, canonical)
+13:10:53  INFO        [160/214]  CEACAM1         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CEACAM1.npy]
+13:10:53  INFO        [161/214]  CEACAM8         seq=2,297 nt  (ENST00000244336, canonical)
+13:10:56  INFO        [161/214]  CEACAM8         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CEACAM8.npy]
+13:10:56  INFO        [162/214]  CD68            seq=1,705 nt  (ENST00000250092, canonical)
+13:10:58  INFO        [162/214]  CD68            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD68.npy]
+13:10:58  INFO        [163/214]  CD69            seq=1,676 nt  (ENST00000228434, canonical)
+13:11:00  INFO        [163/214]  CD69            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD69.npy]
+13:11:00  INFO        [164/214]  CD70            seq=911 nt  (ENST00000245903, canonical)
+13:11:00  INFO        [164/214]  CD70            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD70.npy]
+13:11:00  INFO        [165/214]  TFRC            seq=5,012 nt  (ENST00000360110, canonical)
+13:11:11  INFO        [165/214]  TFRC            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TFRC.npy]
+13:11:11  INFO        [166/214]  CD72            seq=1,531 nt  (ENST00000259633, canonical)
+13:11:12  INFO        [166/214]  CD72            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD72.npy]
+13:11:12  INFO        [167/214]  NT5E            seq=3,562 nt  (ENST00000257770, canonical)
+13:11:18  INFO        [167/214]  NT5E            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\NT5E.npy]
+13:11:18  INFO        [168/214]  CD79A           seq=1,099 nt  (ENST00000221972, canonical)
+13:11:19  INFO        [168/214]  CD79A           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD79A.npy]
+13:11:19  INFO        [169/214]  CD79B           seq=1,246 nt  (ENST00000006750, canonical)
+13:11:20  INFO        [169/214]  CD79B           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD79B.npy]
+13:11:20  INFO        [170/214]  CD8A            seq=2,106 nt  (ENST00000283635, canonical)
+13:11:23  INFO        [170/214]  CD8A            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD8A.npy]
+13:11:23  INFO        [171/214]  CD80            seq=2,737 nt  (ENST00000264246, canonical)
+13:11:27  INFO        [171/214]  CD80            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD80.npy]
+13:11:27  INFO        [172/214]  CD81            seq=1,482 nt  (ENST00000263645, canonical)
+13:11:28  INFO        [172/214]  CD81            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD81.npy]
+13:11:28  INFO        [173/214]  CD83            seq=2,328 nt  (ENST00000379153, canonical)
+13:11:31  INFO        [173/214]  CD83            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD83.npy]
+13:11:31  INFO        [174/214]  LILRA4          seq=1,956 nt  (ENST00000291759, canonical)
+13:11:33  INFO        [174/214]  LILRA4          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\LILRA4.npy]
+13:11:33  INFO        [175/214]  CD86            seq=2,720 nt  (ENST00000330540, canonical)
+13:11:37  INFO        [175/214]  CD86            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD86.npy]
+13:11:37  INFO        [176/214]  CD9             seq=1,225 nt  (ENST00000009180, canonical)
+13:11:38  INFO        [176/214]  CD9             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD9.npy]
+13:11:38  INFO        [177/214]  THY1            seq=4,502 nt  (ENST00000284240, canonical)
+13:11:46  INFO        [177/214]  THY1            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\THY1.npy]
+13:11:46  INFO        [178/214]  CD93            seq=6,681 nt  (ENST00000246006, canonical)
+13:12:11  INFO        [178/214]  CD93            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD93.npy]
+13:12:11  INFO        [179/214]  FAS             seq=3,696 nt  (ENST00000652046, canonical)
+13:12:17  INFO        [179/214]  FAS             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FAS.npy]
+13:12:17  INFO        [180/214]  CD96            seq=4,328 nt  (ENST00000352690, canonical)
+13:12:25  INFO        [180/214]  CD96            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD96.npy]
+13:12:25  INFO        [181/214]  SLC3A2          seq=1,885 nt  (ENST00000338663, canonical)
+13:12:27  INFO        [181/214]  SLC3A2          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\SLC3A2.npy]
+13:12:27  INFO        [182/214]  CD99            seq=1,129 nt  (ENST00000381192, canonical)
+13:12:28  INFO        [182/214]  CD99            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD99.npy]
+13:12:28  INFO        [183/214]  CLEC12A         seq=1,555 nt  (ENST00000304361, canonical)
+13:12:30  INFO        [183/214]  CLEC12A         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CLEC12A.npy]
+13:12:30  INFO        [184/214]  CLEC1B          seq=779 nt  (ENST00000298527, canonical)
+13:12:31  INFO        [184/214]  CLEC1B          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CLEC1B.npy]
+13:12:31  INFO        [185/214]  CX3CR1          seq=3,106 nt  (ENST00000399220, canonical)
+13:12:35  INFO        [185/214]  CX3CR1          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CX3CR1.npy]
+13:12:35  INFO        [186/214]  FOLR2           seq=1,112 nt  (ENST00000298223, canonical)
+13:12:36  INFO        [186/214]  FOLR2           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FOLR2.npy]
+13:12:36  INFO        [187/214]  LGALS9C         seq=1,715 nt  (ENST00000328114, canonical)
+13:12:38  INFO        [187/214]  LGALS9C         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\LGALS9C.npy]
+13:12:38  INFO        [188/214]  IL6ST           seq=9,027 nt  (ENST00000381298, canonical)
+13:13:21  INFO        [188/214]  IL6ST           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\IL6ST.npy]
+13:13:21  INFO        [189/214]  HLA-DRA         seq=1,235 nt  (ENST00000395388, canonical)
+13:13:22  INFO        [189/214]  HLA-DRA         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\HLA-DRA.npy]
+13:13:22  INFO        [190/214]  IGHD            seq=1,678 nt  (ENST00000390556, canonical)
+13:13:24  INFO        [190/214]  IGHD            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\IGHD.npy]
+13:13:24  INFO        [191/214]  IGHM            seq=1,686 nt  (ENST00000637539, canonical)
+13:13:26  INFO        [191/214]  IGHM            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\IGHM.npy]
+13:13:26  INFO        [192/214]  ITGB7           seq=2,806 nt  (ENST00000267082, canonical)
+13:13:30  INFO        [192/214]  ITGB7           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\ITGB7.npy]
+13:13:30  INFO        [193/214]  OLR1            seq=2,456 nt  (ENST00000309539, canonical)
+13:13:33  INFO        [193/214]  OLR1            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\OLR1.npy]
+13:13:33  INFO        [194/214]  MERTK           seq=3,826 nt  (ENST00000295408, canonical)
+13:13:39  INFO        [194/214]  MERTK           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\MERTK.npy]
+13:13:39  INFO        [195/214]  NOTCH1          seq=9,568 nt  (ENST00000651671, canonical)
+13:14:28  INFO        [195/214]  NOTCH1          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\NOTCH1.npy]
+13:14:28  INFO        [196/214]  NOTCH3          seq=8,680 nt  (ENST00000263388, canonical)
+13:15:08  INFO        [196/214]  NOTCH3          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\NOTCH3.npy]
+13:15:08  INFO        [197/214]  PDPN            seq=2,737 nt  (ENST00000621990, canonical)
+13:15:12  INFO        [197/214]  PDPN            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\PDPN.npy]
+13:15:12  INFO        [198/214]  SIGLEC8         seq=2,949 nt  (ENST00000321424, canonical)
+13:15:16  INFO        [198/214]  SIGLEC8         -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\SIGLEC8.npy]
+13:15:16  INFO        [199/214]  TIGIT           seq=2,926 nt  (ENST00000383671, canonical)
+13:15:20  INFO        [199/214]  TIGIT           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TIGIT.npy]
+13:15:20  INFO        [200/214]  TIMD4           seq=1,330 nt  (ENST00000274532, canonical)
+13:15:21  INFO        [200/214]  TIMD4           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\TIMD4.npy]
+13:15:21  INFO        [201/214]  CRLF2           seq=1,538 nt  (ENST00000400841, canonical)
+13:15:23  INFO        [201/214]  CRLF2           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CRLF2.npy]
+13:15:23  INFO        [202/214]  FLT4            seq=5,833 nt  (ENST00000261937, canonical)
+13:15:42  INFO        [202/214]  FLT4            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FLT4.npy]
+13:15:42  INFO        [203/214]  XCR1            seq=5,039 nt  (ENST00000309285, canonical)
+13:15:52  INFO        [203/214]  XCR1            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\XCR1.npy]
+13:15:52  INFO        [204/214]  MME             seq=5,656 nt  (ENST00000360490, canonical)
+13:16:10  INFO        [204/214]  MME             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\MME.npy]
+13:16:10  INFO        [205/214]  CXCR3           seq=1,615 nt  (ENST00000373693, canonical)
+13:16:12  INFO        [205/214]  CXCR3           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CXCR3.npy]
+13:16:12  INFO        [206/214]  CCR7            seq=2,173 nt  (ENST00000246657, canonical)
+13:16:15  INFO        [206/214]  CCR7            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CCR7.npy]
+13:16:15  INFO        [207/214]  FCGR2A          seq=2,646 nt  (ENST00000271450, canonical)
+13:16:18  INFO        [207/214]  FCGR2A          -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\FCGR2A.npy]
+13:16:18  INFO        [208/214]  CD33            seq=1,462 nt  (ENST00000262262, canonical)
+13:16:19  INFO        [208/214]  CD33            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD33.npy]
+13:16:19  INFO        [209/214]  CD5             seq=3,127 nt  (ENST00000347785, canonical)
+13:16:24  INFO        [209/214]  CD5             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD5.npy]
+13:16:24  INFO        [210/214]  SELL            seq=2,358 nt  (ENST00000236147, canonical)
+13:16:27  INFO        [210/214]  SELL            -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\SELL.npy]
+13:16:27  INFO        [211/214]  CD7             seq=1,284 nt  (ENST00000312648, canonical)
+13:16:28  INFO        [211/214]  CD7             -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\CD7.npy]
+13:16:28  INFO        [212/214]  HLA-A           seq=1,535 nt  (ENST00000376809, canonical)
+13:16:30  INFO        [212/214]  HLA-A           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\HLA-A.npy]
+13:16:30  INFO        [213/214]  IGHA1           seq=1,310 nt  (ENST00000641837, canonical)
+13:16:31  INFO        [213/214]  IGHA1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\IGHA1.npy]
+13:16:31  INFO        [214/214]  KLRG1           seq=1,874 nt  (ENST00000356986, canonical)
+13:16:33  INFO        [214/214]  KLRG1           -> saved  shape=(640,)  [C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\KLRG1.npy]
+13:16:33  INFO      
+── Summary ─────────────────────────────────────────────
+13:16:33  INFO        Computed (fresh) : 214
+13:16:33  INFO          MANE Select    : 0
+13:16:33  INFO          Ensembl canon  : 214
+13:16:33  INFO        Reused (cached)  : 0
+13:16:33  INFO        Failed           : 0
+13:16:33  INFO        Metadata         -> C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Create_RNA_FM_features\Output\rnafm_features\metadata.csv
+13:16:33  INFO      Done.

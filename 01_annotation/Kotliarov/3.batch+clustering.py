@@ -33,8 +33,8 @@ sc.settings.set_figure_params(dpi=100, facecolor='white')
 # CONFIGURATION
 # ============================================================================
 
-INPUT_FILE = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/2.HVG+PCA/adata_hvg_pca.h5ad"
-OUTPUT_DIR = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/3.batch+clustering")
+INPUT_FILE = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/Output/2.HVG+PCA/adata_hvg_pca.h5ad")
+OUTPUT_DIR = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/Output/3.batch+clustering")
 FIGURES_DIR = OUTPUT_DIR / "figures"
 
 # Create output directories
@@ -199,22 +199,45 @@ if USE_HARMONY:
         print(f"Correcting for batch key: '{BATCH_KEY}'")
         print(f"Using {N_PCS} PCs for correction")
 
+        # Prepare input: Harmony expects (PCs x Cells)
+        # Scanpy stores (Cells x PCs), so we must transpose
+        pca_input = adata.obsm['X_pca'][:, :N_PCS].T
+        print(f"Harmony input shape: {pca_input.shape}")
+
         # Run Harmony
         ho = hm.run_harmony(
-            adata.obsm['X_pca'][:, :N_PCS],
+            pca_input,
             adata.obs,
             BATCH_KEY,
             max_iter_harmony=10
         )
 
+        # Process output: Check shape and transpose if necessary
+        harmony_out = ho.Z_corr
+        print(f"Harmony raw output shape: {harmony_out.shape}")
+        
+        # Ensure it matches standard numpy array format
+        if not isinstance(harmony_out, np.ndarray):
+            harmony_out = np.array(harmony_out)
+            
+        # Scanpy expects (Cells x PCs), so shape[0] must be n_obs
+        if harmony_out.shape[0] != adata.n_obs:
+            print(f"Transposing output from {harmony_out.shape} to {(harmony_out.shape[1], harmony_out.shape[0])}")
+            harmony_out = harmony_out.T
+            
+        if harmony_out.shape[0] != adata.n_obs:
+             print(f"ERROR: Even after transpose, shape {harmony_out.shape} does not match cells {adata.n_obs}")
+        
         # Store Harmony-corrected embeddings
-        adata.obsm['X_pca_harmony'] = ho.Z_corr.T
+        adata.obsm['X_pca_harmony'] = harmony_out
 
         print("Harmony correction complete")
 
-    except ImportError:
-        print("WARNING: harmonypy not installed. Skipping batch correction.")
-        print("To install: pip install harmonypy")
+    except Exception as e:
+        print(f"WARNING: Harmony correction failed with error: {e}")
+        import traceback
+        traceback.print_exc()
+        print("Falling back to uncorrected PCA.")
         USE_HARMONY = False
         adata.obsm['X_pca_harmony'] = adata.obsm['X_pca'][:, :N_PCS].copy()
 else:

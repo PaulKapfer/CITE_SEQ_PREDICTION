@@ -31,8 +31,8 @@ sc.settings.set_figure_params(dpi=100, facecolor='white')
 # CONFIGURATION
 # ============================================================================
 
-INPUT_FILE = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/1.QC+doublet_detection/adata_qc_filtered.h5ad"
-OUTPUT_DIR = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/2.HVG+PCA")
+INPUT_FILE = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/Output/1.QC+doublet_detection/adata_qc_filtered.h5ad")
+OUTPUT_DIR = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/Output/2.HVG+PCA")
 FIGURES_DIR = OUTPUT_DIR / "figures"
 
 # Create output directories
@@ -369,6 +369,18 @@ hvg_df = adata.var[adata.var['highly_variable']].sort_values('highly_variable_ra
 hvg_file = OUTPUT_DIR / "highly_variable_genes.csv"
 hvg_df.to_csv(hvg_file)
 print(f"Saved highly variable genes list: {hvg_file}")
+
+# Save PCA loadings (genes × PCs) — HVGs only, non-zero entries
+hvg_mask = adata.var['highly_variable']
+loadings_df = pd.DataFrame(
+    adata.varm['PCs'][hvg_mask, :],
+    index=adata.var_names[hvg_mask],
+    columns=[f'PC{i+1}' for i in range(N_PCS)]
+)
+loadings_df.index.name = 'gene'
+loadings_file = OUTPUT_DIR / "pca_loadings.csv"
+loadings_df.to_csv(loadings_file)
+print(f"Saved PCA loadings: {loadings_file}  ({loadings_df.shape[0]} genes × {loadings_df.shape[1]} PCs)")
 
 # Save PCA variance statistics
 pca_stats = pd.DataFrame({

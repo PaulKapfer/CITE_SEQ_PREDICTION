@@ -41,8 +41,8 @@ sc.settings.set_figure_params(dpi=100, facecolor='white')
 # CONFIGURATION
 # ============================================================================
 
-INPUT_FILE = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/3.batch+clustering/adata_batch_clustered.h5ad"
-OUTPUT_DIR = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/4.Annotation+validation")
+INPUT_FILE = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/Output/3.batch+clustering/adata_batch_clustered.h5ad"
+OUTPUT_DIR = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/Output/4.Annotation+validation")
 FIGURES_DIR = OUTPUT_DIR / "figures"
 
 # Create output directories
@@ -57,16 +57,26 @@ CONFIDENCE_THRESHOLD = 0.5
 # Clustering resolution to use for validation
 CLUSTER_KEY = 'leiden_res0.8'
 
-# Known markers for the final merged cell types
+# Known PBMC markers - matched to CellTypist cell types
 KNOWN_MARKERS = {
-    'B cells':            ['CD79A', 'CD79B', 'MS4A1', 'CD19', 'BANK1'],
-    'CD4 T cells':        ['CD4', 'IL7R', 'CCR7', 'LTB', 'SELL', 'LEF1', 'TCF7', 'S100A4'],
-    'CD8 T cells':        ['CD8A', 'CD8B', 'GZMK', 'GZMA', 'PRF1', 'IFNG', 'NKG7'],
-    'NK cells':           ['NCAM1', 'KLRD1', 'GNLY', 'FGFBP2', 'FCGR3A', 'NKG7'],
-    'Monocytes':          ['CD14', 'LYZ', 'S100A8', 'S100A9', 'FCN1', 'FCGR3A', 'MS4A7', 'CDKN1C'],
-    'DC':                 ['FCER1A', 'CST3', 'CLEC10A', 'LILRA4', 'CLEC4C', 'IL3RA'],
-    'MAIT cells':         ['SLC4A10', 'TRAV1-2', 'NCR3', 'KLRB1', 'IL18RAP', 'RORC'],
-    'Regulatory T cells': ['FOXP3', 'IL2RA', 'CTLA4', 'IKZF2', 'TIGIT', 'TNFRSF18'],
+    # T cells
+    'CD4_T': ['CD4', 'IL7R', 'CCR7', 'S100A4', 'LTB', 'SELL', 'LEF1', 'TCF7'],  # CD4 T cells
+    'CD8_T': ['CD8A', 'CD8B', 'GZMK', 'GZMA', 'PRF1', 'IFNG'],  # CD8 memory T cells
+    
+    # NK cells
+    'NK': ['NKG7', 'GNLY', 'NCAM1', 'KLRD1', 'FGFBP2', 'FCGR3A'],  # Natural Killer cells
+    
+    # B cells and Plasma cells
+    'B': ['CD79A', 'CD79B', 'MS4A1', 'CD19', 'IGHA1', 'IGHG1', 'MZB1', 'SDC1', 'JCHAIN'],  # B cells
+
+    # Plasma cells / Plasmablasts (Speziell für Cluster 6 & COVID PBMCs)
+    'Plasma': ['MZB1', 'JCHAIN', 'PRDM1', 'SDC1', 'CD38', 'IGHA1', 'IGHG1', 'XBP1', 'TXNDC5'],
+
+    # Monocytes
+    'Monocyte': ['CD14', 'LYZ', 'S100A8', 'S100A9', 'FCN1', 'FCGR3A', 'MS4A7', 'CDKN1C'],  # Monocytes
+    
+    # Other cell types
+    'Platelet': ['PPBP', 'PF4', 'GNG11', 'TUBB1']  # Platelets
 }
 
 # Differential expression parameters
@@ -242,35 +252,13 @@ try:
     adata.obs['celltype_final'] = adata.obs['celltypist_predicted_labels'].astype(str)
 
     # -------------------------------------------------------------------------
-    # Cell type merging and removal
+    # Optional type merging — populate after inspecting predictions
     # -------------------------------------------------------------------------
-    print("\n[Custom] Applying cell type merges and removals...")
-
-    type_mapping = {
-        'Tcm/Naive cytotoxic T cells':    'CD8 T cells',
-        'Tem/Temra cytotoxic T cells':    'CD8 T cells',
-        'Tem/Trm cytotoxic T cells':      'CD8 T cells',
-        'Tcm/Naive helper T cells':       'CD4 T cells',
-        'Tem/Effector helper T cells':    'CD4 T cells',
-        'Memory B cells':                 'B cells',
-        'Age-associated B cells':         'B cells',
-        'Naive B cells':                  'B cells',
-        'Plasma cells':                   'B cells',
-        'Plasmablasts':                   'B cells',
-        'CD16+ NK cells':                 'NK cells',
-        'Classical monocytes':            'Monocytes',
-        'Non-classical monocytes':        'Monocytes',
-        'DC1':                            'DC',
-        'DC2':                            'DC',
-        'pDC':                            'DC',
-    }
-    adata.obs['celltype_final'] = adata.obs['celltype_final'].replace(type_mapping)
-
-    # NOTE: No cell types are removed for the Kotliarov dataset. All predicted
-    # populations (including small / rare ones) are retained.
-
-    print("\nCell type distribution after merging:")
-    print(adata.obs['celltype_final'].value_counts())
+    # type_mapping = {
+    #     'Example fine type': 'Merged coarse type',
+    # }
+    # adata.obs['celltype_final'] = adata.obs['celltype_final'].replace(type_mapping)
+    print("\n[Custom] No type merging applied — edit type_mapping to customise.")
 
     # Convert to categorical for efficiency
     adata.obs['celltype_final'] = adata.obs['celltype_final'].astype('category')

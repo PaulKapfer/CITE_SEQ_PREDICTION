@@ -76,9 +76,9 @@ from sklearn.model_selection import GroupShuffleSplit
 import xgboost as xgb
 
 # ── CONFIGURATION ──────────────────────────────────────────────────────────────
-REF_PARQUET = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Final_Run/Input/reference_data.parquet"
-MAPPING_CSV = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Final_Run/Input/adt_rna_mapping.csv"
-RNAFM_DIR   = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Final_Run/Input/rnafm_features"
+REF_PARQUET = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Reference_Preparation/Output/reference_data.parquet"
+MAPPING_CSV = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Matching_ADT_Transcript/Output2/combined_adt_mapping_MODEL-TRAINING.csv"
+RNAFM_DIR   = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Create_RNA_FM_features/Output/rnafm_features"
 OUT_DIR     = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Final_Run/Output/Final_Run_stratified_20.05.26"
 
 best_params = {
@@ -93,7 +93,7 @@ best_params = {
 }
 
 N_SPLITS                     = 5
-CELLS_PER_PROTEIN            = 0
+CELLS_PER_PROTEIN            = 50_000
 TUNING_MAX_CELLS_PER_PROTEIN = 20_000
 RNAFM_TOP                    = 640
 N_PCS                        = 50
@@ -130,31 +130,21 @@ rng_sub = np.random.default_rng(RANDOM_STATE)
 
 # ── HELPERS ────────────────────────────────────────────────────────────────────
 def _stratified_sample(valid_idx, ct_labels, n_target, min_per_ct):
-    """Draw n_target cells from valid_idx while preserving cell-type proportions.
-
-    Each cell type first gets a floor of min_per_ct cells (so rare types survive);
-    the remaining budget is allocated proportionally to type size, with any
-    rounding shortfall topped up from the types with most headroom.
-    Returns the chosen subset of valid_idx.
-    """
-    unique_cts, ct_counts = np.unique(ct_labels, return_counts=True)   # cell types and their sizes
-    floor_alloc = np.minimum(ct_counts, min_per_ct)                    # guaranteed floor per type
-    remaining   = max(n_target - floor_alloc.sum(), 0)                 # budget left after floors
+    unique_cts, ct_counts = np.unique(ct_labels, return_counts=True)
+    floor_alloc = np.minimum(ct_counts, min_per_ct)
+    remaining   = max(n_target - floor_alloc.sum(), 0)
     prop_alloc  = np.zeros(len(unique_cts), dtype=np.int64)
     if remaining > 0:
-        # Distribute the remaining budget proportionally to each type's size.
         w = ct_counts.astype(float) / ct_counts.sum()
         prop_alloc = np.floor(w * remaining).astype(np.int64)
-    allocated = np.minimum(floor_alloc + prop_alloc, ct_counts)        # never exceed a type's size
-    shortfall = n_target - allocated.sum()                            # cells still unassigned (rounding)
+    allocated = np.minimum(floor_alloc + prop_alloc, ct_counts)
+    shortfall = n_target - allocated.sum()
     if shortfall > 0:
-        # Top up the shortfall from types with the most remaining capacity.
         headroom = ct_counts - allocated
         for idx in np.argsort(headroom)[::-1]:
             add = min(int(shortfall), int(headroom[idx]))
             allocated[idx] += add; shortfall -= add
             if shortfall <= 0: break
-    # Randomly draw the allocated number of cells from each type.
     sampled = []
     for ct, n_alloc in zip(unique_cts, allocated):
         if n_alloc <= 0: continue
@@ -166,7 +156,6 @@ def _stratified_sample(valid_idx, ct_labels, n_target, min_per_ct):
 
 
 def _group_metrics(y_true, y_pred):
-    """Return (R², Pearson r, n) for a vector pair; NaNs if n < 3 or undefined."""
     n = len(y_true)
     if n < 3: return float("nan"), float("nan"), n
     try:
@@ -177,14 +166,6 @@ def _group_metrics(y_true, y_pred):
 
 
 def calibrate_predictions(y_true, y_pred_raw):
-    """Post-hoc per-protein OLS calibration of raw predictions.
-
-    Fits y_true ~ y_pred_raw, applies slope/intercept, clips at 0, and returns
-    (calibrated_predictions, metrics_dict) with raw & calibrated r/R²/RMSE plus
-    the fitted slope/intercept and cell counts. Falls back to identity when
-    predictions are constant or too few.
-    """
-    # Cannot fit a line if predictions are constant or there are <2 points.
     if len(y_pred_raw) < 2 or np.ptp(y_pred_raw) == 0:
         return y_pred_raw, {
             "r2_raw": float("nan"), "r2_cal": float("nan"),
@@ -194,9 +175,9 @@ def calibrate_predictions(y_true, y_pred_raw):
             "n_cells_total":   len(y_true),
             "n_cells_nonzero": int((y_true >= DROPOUT_THR).sum()),
         }
-    res        = linregress(y_pred_raw.astype(float), y_true.astype(float))   # OLS fit
-    y_pred_cal = np.clip((res.slope * y_pred_raw + res.intercept).astype(np.float32), 0, None)  # rescale, clip ≥0
-    n_nonzero  = int((y_true >= DROPOUT_THR).sum())                           # cells above dropout threshold
+    res        = linregress(y_pred_raw.astype(float), y_true.astype(float))
+    y_pred_cal = np.clip((res.slope * y_pred_raw + res.intercept).astype(np.float32), 0, None)
+    n_nonzero  = int((y_true >= DROPOUT_THR).sum())
     if len(y_true) >= 3:
         r2_raw   = float(r2_score(y_true, y_pred_raw))
         r2_cal   = float(r2_score(y_true, y_pred_cal))
@@ -218,17 +199,12 @@ def calibrate_predictions(y_true, y_pred_raw):
 
 
 def _scatter_plot(y_true, y_pred, title, out_path, max_pts=100_000):
-    """Scatter true vs predicted ADT with an identity line; save to out_path.
-
-    Points are subsampled to max_pts for rendering only — metrics in the title
-    are always computed on the full data.
-    """
-    if len(y_true) > max_pts:                       # subsample for plotting speed only
+    if len(y_true) > max_pts:
         idx = np.random.choice(len(y_true), max_pts, replace=False)
         yt, yp = y_true[idx], y_pred[idx]
     else:
         yt, yp = y_true, y_pred
-    r2, r, n = _group_metrics(y_true, y_pred)       # metrics on full data
+    r2, r, n = _group_metrics(y_true, y_pred)
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.scatter(yt, yp, s=1, alpha=0.2, rasterized=True, color="steelblue")
     lo, hi = min(yt.min(), yp.min()), max(yt.max(), yp.max())
@@ -239,9 +215,8 @@ def _scatter_plot(y_true, y_pred, title, out_path, max_pts=100_000):
 
 
 def _cell_boxplot(cell_df, metric_col, title, out_path):
-    """Horizontal boxplot of a per-cell metric, one box per cell type (median-sorted)."""
     if cell_df.empty: return
-    ct_medians = cell_df.groupby("celltype", observed=True)[metric_col].median().sort_values()  # order boxes by median
+    ct_medians = cell_df.groupby("celltype", observed=True)[metric_col].median().sort_values()
     data   = [cell_df[cell_df["celltype"] == ct][metric_col].dropna().values for ct in ct_medians.index]
     labels = [l for l, d in zip(ct_medians.index, data) if len(d) > 0]
     data   = [d for d in data if len(d) > 0]
@@ -259,58 +234,58 @@ def _cell_boxplot(cell_df, metric_col, title, out_path):
 
 # ── 1. LOAD DATA ──────────────────────────────────────────────────────────────
 log.info("1. Loading reference data and RNA-FM features...")
-df      = pd.read_parquet(REF_PARQUET)   # per-cell reference table (step 03 output)
-mapping = pd.read_csv(MAPPING_CSV)        # ADT_feature → RNA_gene mapping
+df      = pd.read_parquet(REF_PARQUET)
+mapping = pd.read_csv(MAPPING_CSV)
 
-# Load every per-gene RNA-FM embedding (.npy) into memory, then keep only the
-# RNAFM_TOP most variable dimensions across genes (dimensionality reduction).
 rnafm_raw = {fn[:-4]: np.load(os.path.join(RNAFM_DIR, fn)).astype(np.float32)
              for fn in os.listdir(RNAFM_DIR) if fn.endswith(".npy")}
 all_vecs    = np.stack(list(rnafm_raw.values()))
-top_dims    = np.argsort(all_vecs.var(axis=0))[::-1][:RNAFM_TOP]   # indices of highest-variance dims
+top_dims    = np.argsort(all_vecs.var(axis=0))[::-1][:RNAFM_TOP]
 rnafm_cache = {g: v[top_dims] for g, v in rnafm_raw.items()}
-del rnafm_raw, all_vecs   # free memory
+del rnafm_raw, all_vecs
 
-# A protein is "usable" only if it has an ADT column, a matched RNA column, and an RNA-FM vector.
 protein_to_gene = dict(zip(mapping["ADT_feature"], mapping["RNA_gene"]))
+# A missing RNA_<gene> column is not a reason to drop the antibody: the gene was
+# simply never detected in the scRNA-seq matrix, so its log-normalised expression
+# is 0 in every cell (_build_X substitutes a zero column). The ADT measurement is
+# still real and the protein remains predictable from RNA-FM and cell state.
 usable = [
     (p, g) for p, g in protein_to_gene.items()
-    if f"ADT_{p}" in df.columns and f"RNA_{g}" in df.columns and g in rnafm_cache
+    if f"ADT_{p}" in df.columns and g in rnafm_cache
 ]
+_no_rna = sorted({g for _, g in usable if f"RNA_{g}" not in df.columns})
 log.info(f"   Usable proteins: {len(usable)}")
+if _no_rna:
+    log.info(f"   Genes undetected in scRNA-seq (RNA_expr = 0): "
+             f"{len(_no_rna)}  {_no_rna}")
 
-# Deterministic integer id per protein (alphabetical) — the model's antibody_id feature.
 usable_sorted  = sorted(usable, key=lambda x: x[0])
 protein_id_map = {feat: float(i) for i, (feat, _) in enumerate(usable_sorted)}
 log.info(f"   protein_id range: 0 – {len(protein_id_map) - 1}")
 
-# Resolve the DC / PC feature column names present in the reference table.
 unique_cts = sorted(df["celltype"].unique())
 ct_to_int  = {ct: i for i, ct in enumerate(unique_cts)}
 dc_cols = sorted([c for c in df.columns if c.startswith("DC") and c[2:].isdigit()],
                  key=lambda x: int(x[2:]))
 pc_cols = [f"PC{i}" for i in range(1, N_PCS + 1) if f"PC{i}" in df.columns]
 
-# Full ordered feature-vector layout (718 dims): id + expr + endocytosis + DCs + PCs + RNA-FM.
 feature_names = (["protein_id", "RNA_expr", "endocytosis"]
                  + dc_cols + pc_cols + [f"RNAFM_{i}" for i in range(RNAFM_TOP)])
 
 
 def _build_X(sub, gene, protein_id_val=np.nan):
-    """Assemble the (n_cells × 718) feature matrix for one protein/gene.
-
-    Column order must exactly match `feature_names`: protein_id, RNA expression,
-    endocytosis score, 25 DCs, 50 PCs, then the gene's 640-dim RNA-FM vector
-    (broadcast to every cell). protein_id_val is the real id (known) or NaN (unknown).
-    """
     n = len(sub)
+    rna_col = f"RNA_{gene}"
+    rna_expr = (sub[rna_col].values.reshape(-1, 1).astype(np.float32)
+                if rna_col in sub.columns
+                else np.zeros((n, 1), dtype=np.float32))
     return np.concatenate([
-        np.full((n, 1), protein_id_val, dtype=np.float32),                  # protein_id (broadcast)
-        sub[f"RNA_{gene}"].values.reshape(-1, 1).astype(np.float32),        # matched RNA expression
-        sub["RRS_Endocytosis"].values.reshape(-1, 1).astype(np.float32),    # endocytosis RRS (custom UCell-inspired)
-        sub[dc_cols].values.astype(np.float32),                            # 25 RPG diffusion coords
-        sub[pc_cols].values.astype(np.float32),                            # 50 HVG-PCA coords
-        np.tile(rnafm_cache[gene], (n, 1)),                                # 640 RNA-FM dims (same per cell)
+        np.full((n, 1), protein_id_val, dtype=np.float32),
+        rna_expr,
+        sub["RRS_Endocytosis"].values.reshape(-1, 1).astype(np.float32),
+        sub[dc_cols].values.astype(np.float32),
+        sub[pc_cols].values.astype(np.float32),
+        np.tile(rnafm_cache[gene], (n, 1)),
     ], axis=1)
 
 
@@ -355,19 +330,16 @@ class ADTDataIter(xgb.core.DataIter):
 
 
 def _cells_per_protein(pairs, cell_subset=None):
-    """List the number of non-missing-ADT cells available for each protein
-    (optionally restricted to cell_subset). Used to scale min_child_weight."""
     counts = []
     for feat, gene in pairs:
         adt_col   = f"ADT_{feat}"
-        valid_all = np.where(~df[adt_col].isna())[0]                                   # cells with a measurement
+        valid_all = np.where(~df[adt_col].isna())[0]
         valid     = np.intersect1d(valid_all, cell_subset) if cell_subset is not None else valid_all
         if len(valid) > 0:
             counts.append(len(valid))
     return counts if counts else [TUNING_MAX_CELLS_PER_PROTEIN]
 
 def _avg_cells_per_protein(pairs, cell_subset=None):
-    """Median cells-per-protein — the reference count for rescaling min_child_weight."""
     return int(np.median(_cells_per_protein(pairs, cell_subset)))
 
 
@@ -506,26 +478,19 @@ for fold_i, (train_pair_idx, test_pair_idx) in enumerate(folds):
     model.save_model(os.path.join(MODEL_DIR, f"model_fold_{fold_i}.json"))
 
     def _predict_proteins(pairs, label):
-        """Predict each protein in `pairs` on the held-out TEST cells.
-
-        label="unknown" → OOF proteins predicted with protein_id = NaN (zero-shot);
-        label="known"   → in-fold proteins predicted with their real protein_id.
-        Returns a list of per-protein prediction DataFrames (and records OOF
-        calibration metrics as a side effect).
-        """
         rows = []
         for feat, gene in pairs:
             # OOF (unknown) proteins: NaN forces the model to use only
             # transferable biological features (no per-antibody bias).
             pid_val   = np.nan if label == "unknown" else protein_id_map[feat]
             adt_col   = f"ADT_{feat}"
-            valid     = np.intersect1d(np.where(~df[adt_col].isna())[0], cell_test_global)  # test cells with a measurement
+            valid     = np.intersect1d(np.where(~df[adt_col].isna())[0], cell_test_global)
             if len(valid) == 0: continue
             sub       = df.iloc[valid]
             y_true    = sub[adt_col].values.astype(np.float32)
-            y_raw     = model.predict(xgb.DMatrix(_build_X(sub, gene, pid_val)),            # raw model output
-                                      iteration_range=(0, model.best_iteration + 1))         # use best early-stopping tree count
-            y_cal, cal_m = calibrate_predictions(y_true, y_raw)                              # post-hoc calibrate
+            y_raw     = model.predict(xgb.DMatrix(_build_X(sub, gene, pid_val)),
+                                      iteration_range=(0, model.best_iteration + 1))
+            y_cal, cal_m = calibrate_predictions(y_true, y_raw)
             if label == "unknown":
                 cal_m["protein"] = feat; cal_m["transcript"] = gene; cal_m["fold"] = fold_i
                 all_calibration_metrics.append(cal_m)
@@ -586,8 +551,6 @@ pd.DataFrame(all_calibration_metrics).to_csv(
 log.info("6. Computing statistics...")
 
 def _protein_stats(data, label):
-    """Per-protein summary table: r, R², RMSE (raw & calibrated) plus mean/SD,
-    computed across all cells of each protein (skipping proteins with <3 cells)."""
     rows = []
     for prot, g in data.groupby("protein", observed=True):
         if len(g) < 3: continue
@@ -607,8 +570,6 @@ def _protein_stats(data, label):
     return pd.DataFrame(rows)
 
 def _cell_stats(data, label):
-    """Per-cell summary table: Pearson r, R² and Spearman r across all proteins
-    measured in each cell (requires ≥5 proteins per cell for a stable estimate)."""
     rows = []
     for cid, g in data.groupby("cell_id", observed=True):
         if len(g) < 5: continue
@@ -657,8 +618,6 @@ log.info(f"   In-fold known per-cell: {len(cell_stats_known):,} cells  |  "
 log.info("7. Generating plots...")
 
 def _make_plots(data, tag):
-    """Write the OOF-unknown scatter + per-cell r/R² boxplots for one data subset
-    (tag = 'filtered' or 'unfiltered'), for both raw and calibrated predictions."""
     tag_dir = os.path.join(PLOT_DIR, tag)
     for p_type in ["raw", "cal"]:
         p_col = f"y_pred_{p_type}"

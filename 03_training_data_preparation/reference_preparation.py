@@ -8,9 +8,10 @@ for out-of-sample projection of new cells.
 
 Modules
 -------
-1. RPG pairwise co-expression → diffusion map (up to 25 components)
-   + Nyström landmark selection (25000 cells via MiniBatchKMeans)
-2. HVG selection (5000 genes, Seurat-style) + PCA (50 components)
+1. RPG pairwise co-expression → diffusion map (up to 25 components);
+   RPG genes = HGNC gene groups 728 + 729 (S / L ribosomal proteins)
+   + Nyström landmark selection (2500 cells via MiniBatchKMeans)
+2. HVG selection (2000 genes, Seurat-style) + PCA (50 components)
    with gene-scaling params and per-gene loadings saved
 3. Relative Rank Scoring (RRS) for Endocytosis GO pathway (chunked)
 
@@ -29,13 +30,13 @@ Subdirectory artefacts for out-of-sample mapping
     rpg_gene_list.csv          — RPG genes used (in order)
     rpg_pair_names.csv         — column names for pairwise products
     diffmap_eigenvalues.csv    — eigenvalues DC1..DC10
-    landmark_barcodes.csv      — 25000 landmark barcodes + celltype
+    landmark_barcodes.csv      — 2500 landmark barcodes + celltype
     landmark_rpg_vectors.csv   — RPG pairwise product vectors (landmarks × pairs)
     landmark_dc_coords.csv     — DC positions for landmarks (landmarks × DC)
     landmark_local_sigma.csv   — per-landmark local sigma from diffusion map
     landmark_sigma_global.txt  — median sigma (scalar) for Nyström kernel
   HVG_PCA/
-    hvg_genes.csv              — 5000 HVG names + dispersion stats
+    hvg_genes.csv              — 2000 HVG names + dispersion stats
     gene_scaling.csv           — mean + std per HVG (center/scale new data)
     pca_loadings.csv           — gene × PC loading matrix
     pca_variance.csv           — explained variance per PC
@@ -48,6 +49,13 @@ Dependencies
 import math
 import sys
 import warnings
+
+# Windows consoles default to cp1252, which can't encode the "→" characters
+# used in some print() messages below and crashes mid-run. Force UTF-8.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except (AttributeError, ValueError):
+    pass
 
 import numpy as np
 import pandas as pd
@@ -65,12 +73,20 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 
 # ── CONFIGURATION ──────────────────────────────────────────────────────────────
 INPUT_H5AD   = Path(r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Annotation\Hao\Output\4.Annotation+validation\adata_annotated.h5ad")
-RPG_FILE     = Path(r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Reference_Preparation\Input\human_cytosolic.csv")
+# Cytoplasmic ribosomal protein genes = HGNC gene groups 728 "S ribosomal proteins"
+# and 729 "L ribosomal proteins" (89 approved protein-coding genes; mitochondrial
+# ribosomal proteins are separate HGNC groups). Downloaded 2026-09-26 from
+# https://www.genenames.org/cgi-bin/genegroup/download?id={728,729}&type=branch
+# Cite: Seal RL et al., Genenames.org: the HGNC resources in 2023,
+#       Nucleic Acids Res 51(D1):D1003-D1009, doi:10.1093/nar/gkac888.
+# Replaces the earlier 87-gene hand-curated list (Input/human_cytosolic.csv).
+RPG_FILES    = [Path(r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Reference_Preparation\Input\HGNC_genegroup_728.tsv"),
+                Path(r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Reference_Preparation\Input\HGNC_genegroup_729.tsv")]
 OUT_DIR      = Path(r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Reference_Preparation\Output")
 RPG_DIR      = OUT_DIR / "RPG_diffmap"
 HVG_DIR      = OUT_DIR / "HVG_PCA"
 
-MAPPING_CSV  = Path(r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Reference_Preparation\Input\adt_rna_mapping.csv")
+MAPPING_CSV  = Path(r"C:\Users\Paul\Desktop\Publications\CITE-SEQ_pred\Matching_ADT_Transcript\Output2\combined_adt_mapping_MODEL-TRAINING.csv")
 CELLTYPE_COL = "celltype_final"
 N_DC         = 25       # diffusion components to retain (max 25)
 N_LANDMARKS  = 25000     # Nyström landmark cells
@@ -194,12 +210,14 @@ print(f"  X shape: {X_rna.shape}  nnz={X_rna.nnz:,}")
 # ── 2. RPG CO-EXPRESSION ──────────────────────────────────────────────────────
 print("\n2. Computing RPG pairwise co-expression ...")
 
-rpg_list = (pd.read_csv(RPG_FILE, header=None, names=["gene"])["gene"]
-              .astype(str).tolist())
-print(f"  {len(rpg_list)} genes in RPG list")
+_hgnc = pd.concat([pd.read_csv(p, sep="\t", dtype=str) for p in RPG_FILES], ignore_index=True)
+rpg_list = sorted(_hgnc["Approved symbol"].str.strip().unique())
+print(f"  {len(rpg_list)} genes in RPG list  (HGNC groups "
+      f"{', '.join(sorted(_hgnc['Group name'].unique()))})")
 
 gene_to_idx = {g: i for i, g in enumerate(gene_names)}
 rpg_found   = [g for g in rpg_list if g in gene_to_idx]
+print(f"  not in dataset: {[g for g in rpg_list if g not in gene_to_idx]}")
 rpg_idx     = [gene_to_idx[g] for g in rpg_found]
 n_rpg       = len(rpg_found)
 print(f"  {n_rpg} / {len(rpg_list)} RPG genes found in dataset")

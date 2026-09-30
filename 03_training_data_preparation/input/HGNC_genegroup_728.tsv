@@ -1,0 +1,36 @@
+HGNC ID	Approved symbol	Approved name	Status	Locus type	Previous symbols	Alias symbols	Chromosome	NCBI Gene ID	Ensembl gene ID	Vega gene ID	Group ID	Group name
+HGNC:10383	RPS10	ribosomal protein S10	Approved	gene with protein product		MGC88819, S10, eS10	6p21.31	6204	ENSG00000124614	OTTHUMG00000014546	728	S ribosomal proteins
+HGNC:10384	RPS11	ribosomal protein S11	Approved	gene with protein product		S11, uS17	19q13.3	6205	ENSG00000142534	OTTHUMG00000183156	728	S ribosomal proteins
+HGNC:10385	RPS12	ribosomal protein S12	Approved	gene with protein product		S12, eS12	6q23.2	6206	ENSG00000112306	OTTHUMG00000015593	728	S ribosomal proteins
+HGNC:10386	RPS13	ribosomal protein S13	Approved	gene with protein product		S13, uS15	11p15.1	6207	ENSG00000110700	OTTHUMG00000165988	728	S ribosomal proteins
+HGNC:10387	RPS14	ribosomal protein S14	Approved	gene with protein product		EMTB, S14, uS11	5q33.1	6208	ENSG00000164587	OTTHUMG00000130080	728	S ribosomal proteins
+HGNC:10388	RPS15	ribosomal protein S15	Approved	gene with protein product		RIG, MGC111130, S15, uS19	19p13.3	6209	ENSG00000115268	OTTHUMG00000140099	728	S ribosomal proteins
+HGNC:10389	RPS15A	ribosomal protein S15a	Approved	gene with protein product		S15A, uS8	16p12.3	6210	ENSG00000134419	OTTHUMG00000131365	728	S ribosomal proteins
+HGNC:10396	RPS16	ribosomal protein S16	Approved	gene with protein product		S16, uS9	19q13.2	6217	ENSG00000105193	OTTHUMG00000182972	728	S ribosomal proteins
+HGNC:10397	RPS17	ribosomal protein S17	Approved	gene with protein product	RPS17L	RPS17L1, RPS17L2, MGC72007, S17, eS17	15q25.2	6218	ENSG00000182774	OTTHUMG00000147355	728	S ribosomal proteins
+HGNC:10401	RPS18	ribosomal protein S18	Approved	gene with protein product	D6S218E	KE3, KE-3, HKE3, S18, uS13	6p21.32	6222	ENSG00000231500	OTTHUMG00000031053	728	S ribosomal proteins
+HGNC:10402	RPS19	ribosomal protein S19	Approved	gene with protein product	LOH19CR1	S19, eS19, DBA	19q13.2	6223	ENSG00000105372	OTTHUMG00000182676	728	S ribosomal proteins
+HGNC:10404	RPS2	ribosomal protein S2	Approved	gene with protein product		LLREP3, S2, uS5	16p13.3	6187	ENSG00000140988	OTTHUMG00000128708	728	S ribosomal proteins
+HGNC:10405	RPS20	ribosomal protein S20	Approved	gene with protein product		S20, uS10	8q12.1	6224	ENSG00000008988	OTTHUMG00000164297	728	S ribosomal proteins
+HGNC:10409	RPS21	ribosomal protein S21	Approved	gene with protein product		S21, eS21	20q13.33	6227	ENSG00000171858	OTTHUMG00000032915	728	S ribosomal proteins
+HGNC:10410	RPS23	ribosomal protein S23	Approved	gene with protein product		S23, uS12	5q14.2	6228	ENSG00000186468	OTTHUMG00000162557	728	S ribosomal proteins
+HGNC:10411	RPS24	ribosomal protein S24	Approved	gene with protein product		S24, eS24	10q22.3	6229	ENSG00000138326	OTTHUMG00000018549	728	S ribosomal proteins
+HGNC:10413	RPS25	ribosomal protein S25	Approved	gene with protein product		S25, eS25	11q23.3	6230	ENSG00000118181	OTTHUMG00000166350	728	S ribosomal proteins
+HGNC:10414	RPS26	ribosomal protein S26	Approved	gene with protein product		S26, eS26	12q13.2	6231	ENSG00000197728	OTTHUMG00000170139	728	S ribosomal proteins
+HGNC:10416	RPS27	ribosomal protein S27	Approved	gene with protein product		MPS-1, MPS1, S27, eS27	1q21.3	6232	ENSG00000177954	OTTHUMG00000036591	728	S ribosomal proteins
+HGNC:10417	RPS27A	ribosomal protein S27a	Approved	gene with protein product		UBCEP80, Uba80, S27A, eS31	2p16.1	6233	ENSG00000143947	OTTHUMG00000151919	728	S ribosomal proteins
+HGNC:18476	RPS27L	ribosomal protein S27 like	Approved	gene with protein product			15q22.2	51065	ENSG00000185088	OTTHUMG00000155301	728	S ribosomal proteins
+HGNC:10418	RPS28	ribosomal protein S28	Approved	gene with protein product		S28, eS28	19p13.2	6234	ENSG00000233927	OTTHUMG00000182460	728	S ribosomal proteins
+HGNC:10419	RPS29	ribosomal protein S29	Approved	gene with protein product		S29, uS14	14q21.3	6235	ENSG00000213741	OTTHUMG00000140272	728	S ribosomal proteins
+HGNC:10420	RPS3	ribosomal protein S3	Approved	gene with protein product		FLJ26283, FLJ27450, MGC87870, S3, uS3	11q13.4	6188	ENSG00000149273	OTTHUMG00000165448	728	S ribosomal proteins
+HGNC:3597	FAU	FAU ubiquitin like and ribosomal protein S30 fusion	Approved	gene with protein product		RPS30, FLJ22986, Fub1, Fubi, MNSFbeta, asr1, S30, eS30	11q13.1	2197	ENSG00000149806	OTTHUMG00000165606	728	S ribosomal proteins
+HGNC:10421	RPS3A	ribosomal protein S3A	Approved	gene with protein product	MFTL	S3A, eS1	4q31.3	6189	ENSG00000145425	OTTHUMG00000161445	728	S ribosomal proteins
+HGNC:10424	RPS4X	ribosomal protein S4 X-linked	Approved	gene with protein product		DXS306, CCG2, SCAR, SCR10, FLJ40595, RPS4, eS4	Xq13.1	6191	ENSG00000198034	OTTHUMG00000021813	728	S ribosomal proteins
+HGNC:10425	RPS4Y1	ribosomal protein S4 Y-linked 1	Approved	gene with protein product	RPS4Y	MGC5070, MGC119100, S4	Yp11.2	6192	ENSG00000129824	OTTHUMG00000036152	728	S ribosomal proteins
+HGNC:18501	RPS4Y2	ribosomal protein S4 Y-linked 2	Approved	gene with protein product	RPS4Y2P		Yq11.223	140032	ENSG00000280969	OTTHUMG00000036540	728	S ribosomal proteins
+HGNC:10426	RPS5	ribosomal protein S5	Approved	gene with protein product		S5, uS7	19q13.43	6193	ENSG00000083845	OTTHUMG00000183530	728	S ribosomal proteins
+HGNC:10429	RPS6	ribosomal protein S6	Approved	gene with protein product		S6, eS6	9p22.1	6194	ENSG00000137154	OTTHUMG00000019642	728	S ribosomal proteins
+HGNC:10440	RPS7	ribosomal protein S7	Approved	gene with protein product		S7, eS7	2p25.3	6201	ENSG00000171863	OTTHUMG00000090305	728	S ribosomal proteins
+HGNC:10441	RPS8	ribosomal protein S8	Approved	gene with protein product		S8, eS8	1p34.1	6202	ENSG00000142937	OTTHUMG00000008494	728	S ribosomal proteins
+HGNC:10442	RPS9	ribosomal protein S9	Approved	gene with protein product		S9, uS4	19q13.42	6203	ENSG00000170889	OTTHUMG00000066618	728	S ribosomal proteins
+HGNC:6502	RPSA	ribosomal protein SA	Approved	gene with protein product	LAMR1	LRP, 37LRP, p40, SA, uS2	3p22.1	3921	ENSG00000168028	OTTHUMG00000131296	728	S ribosomal proteins

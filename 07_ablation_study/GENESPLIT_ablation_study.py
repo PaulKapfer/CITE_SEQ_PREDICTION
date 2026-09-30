@@ -9,14 +9,15 @@ condition. Additional feature classes are introduced one at a time, then
 removed again, so the contribution of each class is measured against the
 same two-feature baseline.
 
-Conditions (6, matching the published Table 1; see CONDITIONS below)
+Conditions
 ----------
   baseline        – protein_id + RNA_expr  (minimal model)
-  add_pca         – protein_id + RNA_expr + HVG-PCA coordinates (50 dims)
-  add_dc          – protein_id + RNA_expr + RPG diffusion-map coordinates (25 dims)
-  add_endocytosis – protein_id + RNA_expr + endocytosis RRS (custom UCell-inspired)
-  add_rnafm       – protein_id + RNA_expr + RNA-FM embeddings (640 dims)
-  all_features    – protein_id + RNA_expr + all of the above (full model)
+  add_pca         – protein_id + RNA_expr + PCA dims
+  add_dc          – protein_id + RNA_expr + DC dims
+  add_endocytosis – protein_id + RNA_expr + endocytosis / phagocytosis score
+  add_rnafm       – protein_id + RNA_expr + RNA-FM embeddings
+  add_rnafm_dc    – protein_id + RNA_expr + RNA-FM + DC dims
+                    (interaction between structural embeddings and cell topology)
 
 Two prediction sets are collected per fold (mirroring the reference script):
   1. OOF unknown proteins  — te_pairs × cell_test_global (protein_id = NaN)
@@ -62,9 +63,6 @@ Output layout
       models/
         model_fold_{0..4}.json
         fold_protein_splits.csv
-      plots/
-        oof_scatter_{filtered,unfiltered}_{raw,cal}.png
-        known_scatter_{filtered,unfiltered}_{raw,cal}.png
 """
 
 import os, sys, logging, pickle, gc, shutil
@@ -81,9 +79,9 @@ from sklearn.model_selection import GroupShuffleSplit
 import xgboost as xgb
 
 # ── CONFIGURATION ──────────────────────────────────────────────────────────────
-REF_PARQUET   = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Final_Run/Input/reference_data.parquet"
-MAPPING_CSV   = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Final_Run/Input/adt_rna_mapping.csv"
-RNAFM_DIR     = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Final_Run/Input/rnafm_features"
+REF_PARQUET   = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Reference_Preparation/Output/reference_data.parquet"
+MAPPING_CSV   = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Matching_ADT_Transcript/Output2/combined_adt_mapping_MODEL-TRAINING.csv"
+RNAFM_DIR     = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Create_RNA_FM_features/Output/rnafm_features"
 ABLATION_BASE = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Ablation_study/Output"
 
 best_params = {
@@ -112,7 +110,7 @@ N_JOBS                       = 12
 # allowing the marginal contribution of each feature class to be measured independently.
 # The final condition ("all_features") combines all classes and matches the full production model.
 # Optional feature-class keys: "pca" (PCA coords), "dc" (diffusion-map coords),
-#                               "phagocytosis" (endocytosis RRS, custom UCell-inspired), "rnafm" (RNA-FM embeddings)
+#                               "phagocytosis" (endocytosis UCell score), "rnafm" (RNA-FM embeddings)
 CONDITIONS = [
     ("baseline",        frozenset()),                          # protein_id + RNA_expr only
     ("add_pca",         frozenset({"pca"})),                   # + PCA dims
@@ -153,11 +151,19 @@ rnafm_cache = {g: v[top_dims] for g, v in rnafm_raw.items()}
 del rnafm_raw, all_vecs; gc.collect()
 
 protein_to_gene = dict(zip(mapping["ADT_feature"], mapping["RNA_gene"]))
+# A missing RNA_<gene> column is not a reason to drop the antibody: the gene was
+# simply never detected in the scRNA-seq matrix, so its log-normalised expression
+# is 0 in every cell (_build_X substitutes a zero column). The ADT measurement is
+# still real and the protein remains predictable from RNA-FM and cell state.
 usable = [
     (p, g) for p, g in protein_to_gene.items()
-    if f"ADT_{p}" in df.columns and f"RNA_{g}" in df.columns and g in rnafm_cache
+    if f"ADT_{p}" in df.columns and g in rnafm_cache
 ]
+_no_rna = sorted({g for _, g in usable if f"RNA_{g}" not in df.columns})
 log.info(f"  Usable proteins: {len(usable)}")
+if _no_rna:
+    log.info(f"  Genes undetected in scRNA-seq (RNA_expr = 0): "
+             f"{len(_no_rna)}  {_no_rna}")
 
 # Stable protein_id mapping (alphabetical → reproducible integer ids)
 usable_sorted  = sorted(usable, key=lambda x: x[0])
@@ -266,9 +272,12 @@ def _build_X(sub, gene, protein_id_val, include):
     protein_id and RNA_expr are always included.
     `include` is a frozenset of optional feature-class keys to add."""
     n = len(sub)
+    rna_col = f"RNA_{gene}"
     parts = [
         np.full((n, 1), protein_id_val, dtype=np.float32),
-        sub[f"RNA_{gene}"].values.reshape(-1, 1).astype(np.float32),
+        (sub[rna_col].values.reshape(-1, 1).astype(np.float32)
+         if rna_col in sub.columns
+         else np.zeros((n, 1), dtype=np.float32)),
     ]
     if "phagocytosis" in include:
         parts.append(sub["RRS_Endocytosis"].values.reshape(-1, 1).astype(np.float32))
@@ -282,8 +291,6 @@ def _build_X(sub, gene, protein_id_val, include):
 
 
 def _stratified_sample(rng, valid_idx, ct_labels, n_target, min_per_ct):
-    """Sample n_target cells preserving cell-type proportions (min_per_ct floor per
-    type). Takes an explicit rng so subsampling is reproducible per fold/condition."""
     unique_cts, ct_counts = np.unique(ct_labels, return_counts=True)
     # Guarantee a minimum floor per cell type to preserve rare populations
     floor_alloc = np.minimum(ct_counts, min_per_ct)
@@ -431,26 +438,7 @@ def _cell_stats(data):
     return pd.DataFrame(rows)
 
 
-def _scatter_plot(y_true, y_pred, title, out_path, max_pts=100_000):
-    # Subsample points for rendering only; metrics are always computed on the full set
-    if len(y_true) > max_pts:
-        idx = np.random.default_rng(0).choice(len(y_true), max_pts, replace=False)
-        yt, yp = y_true[idx], y_pred[idx]
-    else:
-        yt, yp = y_true, y_pred
-    r2, r, n = _group_metrics(y_true, y_pred)
-    fig, ax = plt.subplots(figsize=(6, 6))
-    ax.scatter(yt, yp, s=1, alpha=0.2, rasterized=True, color="steelblue")
-    lo = min(float(yt.min()), float(yp.min()))
-    hi = max(float(yt.max()), float(yp.max()))
-    ax.plot([lo, hi], [lo, hi], "r--", lw=1)  # identity line (perfect prediction)
-    ax.set_xlabel("True ADT (log-norm)"); ax.set_ylabel("Predicted ADT")
-    ax.set_title(f"{title}\nR²={r2:.4f}  r={r:.4f}  n={n:,}")
-    plt.tight_layout(); fig.savefig(out_path, dpi=150); plt.close(fig)
-
-
 def _avg_cells_per_protein(pairs, cell_subset=None):
-    """Median cells-per-protein (within cell_subset) — used to rescale min_child_weight."""
     counts = []
     for feat, _gene in pairs:
         adt_col   = f"ADT_{feat}"
@@ -523,8 +511,7 @@ for cond_name, include in CONDITIONS:
     stat_dir  = os.path.join(cond_dir, "statistics")
     cal_dir   = os.path.join(cond_dir, "calibration")
     model_dir = os.path.join(cond_dir, "models")
-    plot_dir  = os.path.join(cond_dir, "plots")
-    for _d in [cond_dir, pred_dir, stat_dir, cal_dir, model_dir, plot_dir]:
+    for _d in [cond_dir, pred_dir, stat_dir, cal_dir, model_dir]:
         os.makedirs(_d, exist_ok=True)
 
     shutil.copy2(FOLD_SPLIT_CSV, os.path.join(model_dir, "fold_protein_splits.csv"))
@@ -697,21 +684,6 @@ for cond_name, include in CONDITIONS:
              f"median r_cal={cs_known['r_cal'].median():.4f}  "
              f"median spearman_cal={cs_known['spearman_r_cal'].median():.4f}")
 
-    # ── Scatter plots ─────────────────────────────────────────────────────────
-    for data, prefix, label_prefix in [
-        (cv_oof,       "oof",   "OOF Unknown"),
-        (cv_known_avg, "known", "In-Fold Known"),
-    ]:
-        for subset_data, tag in [(data[data["y_true"] >= DROPOUT_THR], "filtered"),
-                                  (data, "unfiltered")]:
-            for p_type in ["raw", "cal"]:
-                p_label = "Calibrated" if p_type == "cal" else "Raw"
-                _scatter_plot(
-                    subset_data["y_true"].values,
-                    subset_data[f"y_pred_{p_type}"].values,
-                    f"{cond_name} — {label_prefix} [{tag}, {p_label}]",
-                    os.path.join(plot_dir, f"{prefix}_scatter_{tag}_{p_type}.png"))
-
     del cv_oof, cv_known_perfold, cv_known_avg; gc.collect()
 
     log.removeHandler(_fh); _fh.close()
@@ -752,8 +724,6 @@ log.info(f"\n{summary_df.to_string(index=False)}")
 
 
 def _summary_barplot(df_sub, ptype_label, out_path):
-    """Horizontal bar chart comparing per-cell median r (raw/cal/Spearman) across
-    all ablation conditions for one protein type, with a baseline reference line."""
     conditions = df_sub["condition"].tolist()
     colors     = ["#4C9BE8" if c == "baseline" else "#E8834C" for c in conditions]
     metrics    = [

@@ -19,9 +19,7 @@ Cell-type membership is read from cell_type_assignments.csv
 Cross-validation design (identical to the full-data run)
 ---------------------------------------------------------
   - Cells: fixed 20% test hold-out by donor (GroupShuffleSplit).
-  - Proteins: 5-fold gene-grouped, RNA-FM-stratified split (proteins sharing a
-    transcript co-assigned to one fold; folds balanced by K-means on RNA-FM
-    embeddings) — see section 3 below; identical design to the full-data run.
+  - Proteins: 5-fold KFold.
   - Every (test_cell, test_protein) pair is predicted by a model that saw
     neither that cell nor that protein during training.
   - Unknown proteins (OOF): protein_id = NaN.
@@ -53,16 +51,16 @@ from sklearn.model_selection import GroupShuffleSplit
 import xgboost as xgb
 
 # ── CONFIGURATION ──────────────────────────────────────────────────────────────
-REF_PARQUET  = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Final_Run/Input/reference_data.parquet"
-MAPPING_CSV  = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Final_Run/Input/adt_rna_mapping.csv"
-RNAFM_DIR    = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Final_Run/Input/rnafm_features"
-CELLTYPE_CSV = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Hao/4.Annotation+validation/cell_type_assignments.csv"
+REF_PARQUET  = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Reference_Preparation/Output/reference_data.parquet"
+MAPPING_CSV  = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Matching_ADT_Transcript/Output2/combined_adt_mapping_MODEL-TRAINING.csv"
+RNAFM_DIR    = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Create_RNA_FM_features/Output/rnafm_features"
+CELLTYPE_CSV = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Hao/Output/4.Annotation+validation/cell_type_assignments.csv"
 BASE_OUT_DIR = "C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Per-Celltype-Test/Output"
 
 # ── CELL-TYPE TOGGLES ─────────────────────────────────────────────────────────
 RUN_MONOCYTES  = True   # toggle Monocytes run on/off
-RUN_CD4_T      = False  # toggle CD4 T cells run on/off
-RUN_CD8_T      = False  # toggle CD8 T cells run on/off
+RUN_CD4_T      = True   # toggle CD4 T cells run on/off
+RUN_CD8_T      = True   # toggle CD8 T cells run on/off
 
 CELL_TYPES_TO_RUN = (
     (["Monocytes"]    if RUN_MONOCYTES else []) +
@@ -84,7 +82,7 @@ best_params = {
 }
 
 N_SPLITS                     = 5
-CELLS_PER_PROTEIN            = 0
+CELLS_PER_PROTEIN            = 50_000
 TUNING_MAX_CELLS_PER_PROTEIN = 20_000
 RNAFM_TOP                    = 640
 N_PCS                        = 50
@@ -99,7 +97,6 @@ rng_sub = np.random.default_rng(RANDOM_STATE)
 
 
 def _group_metrics(y_true, y_pred):
-    """Return (R², Pearson r, n) for a vector pair; NaNs if n < 3 or undefined."""
     n = len(y_true)
     if n < 3:
         return float("nan"), float("nan"), n
@@ -112,9 +109,6 @@ def _group_metrics(y_true, y_pred):
 
 
 def calibrate_predictions(y_true, y_pred_raw):
-    """Post-hoc per-protein OLS calibration (y_true ~ y_pred_raw), clipped at 0.
-    Returns (calibrated_predictions, metrics_dict). Identity fallback if predictions
-    are constant or too few."""
     if len(y_pred_raw) < 2 or np.ptp(y_pred_raw) == 0:
         return y_pred_raw, {
             "r2_raw": float("nan"), "r2_cal": float("nan"),
@@ -148,8 +142,6 @@ def calibrate_predictions(y_true, y_pred_raw):
 
 
 def _scatter_plot(y_true, y_pred, title, out_path, max_pts=100_000):
-    """Scatter true vs predicted ADT with an identity line; points subsampled to
-    max_pts for rendering only (title metrics use the full data)."""
     if len(y_true) > max_pts:
         idx = np.random.choice(len(y_true), max_pts, replace=False)
         yt, yp = y_true[idx], y_pred[idx]
@@ -166,7 +158,6 @@ def _scatter_plot(y_true, y_pred, title, out_path, max_pts=100_000):
 
 
 def _cell_boxplot(cell_df, metric_col, title, out_path):
-    """Horizontal boxplot of a per-cell metric, one box per cell type (median-sorted)."""
     if cell_df.empty:
         return
     ct_medians = cell_df.groupby("celltype", observed=True)[metric_col].median().sort_values()
@@ -201,10 +192,15 @@ del rnafm_raw, all_vecs
 
 # Protein-gene pairs and feature layout derived from the full parquet once
 protein_to_gene = dict(zip(mapping["ADT_feature"], mapping["RNA_gene"]))
+# A missing RNA_<gene> column is not a reason to drop the antibody: the gene was
+# simply never detected in the scRNA-seq matrix, so its log-normalised expression
+# is 0 in every cell (_build_X substitutes a zero column). The ADT measurement is
+# still real and the protein remains predictable from RNA-FM and cell state.
 usable_full = [
     (p, g) for p, g in protein_to_gene.items()
-    if f"ADT_{p}" in df_full.columns and f"RNA_{g}" in df_full.columns and g in rnafm_cache
+    if f"ADT_{p}" in df_full.columns and g in rnafm_cache
 ]
+_no_rna = sorted({g for _, g in usable_full if f"RNA_{g}" not in df_full.columns})
 usable_sorted  = sorted(usable_full, key=lambda x: x[0])
 protein_id_map = {feat: float(i) for i, (feat, _) in enumerate(usable_sorted)}
 
@@ -216,6 +212,8 @@ feature_names = (["protein_id", "RNA_expr", "endocytosis"]
                  + dc_cols + pc_cols + [f"RNAFM_{i}" for i in range(RNAFM_TOP)])
 
 print(f"  Usable proteins: {len(usable_full)}")
+if _no_rna:
+    print(f"  Genes undetected in scRNA-seq (RNA_expr = 0): {len(_no_rna)}  {_no_rna}")
 print(f"  Full parquet: {len(df_full):,} cells")
 print(f"  Cell type assignments loaded: {len(ct_asgn):,} barcodes")
 print()
@@ -284,12 +282,14 @@ for CELLTYPE_NAME in CELL_TYPES_TO_RUN:
 
     # ── FEATURE BUILDER ───────────────────────────────────────────────────────
     def _build_X(sub, gene, protein_id_val=np.nan):
-        """Assemble the 718-dim feature matrix for one protein/gene (same column
-        order as the full model): protein_id, RNA expr, endocytosis, 25 DC, 50 PC, 640 RNA-FM."""
         n = len(sub)
+        rna_col = f"RNA_{gene}"
+        rna_expr = (sub[rna_col].values.reshape(-1, 1).astype(np.float32)
+                    if rna_col in sub.columns
+                    else np.zeros((n, 1), dtype=np.float32))
         return np.concatenate([
             np.full((n, 1), protein_id_val, dtype=np.float32),
-            sub[f"RNA_{gene}"].values.reshape(-1, 1).astype(np.float32),
+            rna_expr,
             sub["RRS_Endocytosis"].values.reshape(-1, 1).astype(np.float32),
             sub[dc_cols].values.astype(np.float32),
             sub[pc_cols].values.astype(np.float32),
@@ -309,16 +309,11 @@ for CELLTYPE_NAME in CELL_TYPES_TO_RUN:
 
     # ── DATA ITERATOR ─────────────────────────────────────────────────────────
     class ADTDataIter(xgb.core.DataIter):
-        """Streams the training matrix to XGBoost one protein at a time (keeps peak
-        memory low). Each protein contributes its valid training cells with the real
-        protein_id; XGBoost concatenates the per-protein blocks internally."""
         def __init__(self, protein_pairs, cell_subset=None):
             self.pairs = protein_pairs; self.cell_subset = cell_subset; self._it = 0
             super().__init__(cache_prefix=None)
 
         def next(self, input_data):
-            # Called repeatedly by XGBoost: feed the next protein's block, return 1;
-            # return 0 once all proteins have been streamed.
             if self._it == len(self.pairs):
                 return 0
             feat, gene = self.pairs[self._it]
@@ -341,7 +336,6 @@ for CELLTYPE_NAME in CELL_TYPES_TO_RUN:
             self._it = 0
 
     def _cells_per_protein(pairs, cell_subset=None):
-        """Cells with a non-missing ADT measurement per protein (within cell_subset)."""
         counts = []
         for feat, gene in pairs:
             adt_col   = f"ADT_{feat}"
@@ -353,7 +347,6 @@ for CELLTYPE_NAME in CELL_TYPES_TO_RUN:
         return counts if counts else [TUNING_MAX_CELLS_PER_PROTEIN]
 
     def _avg_cells_per_protein(pairs, cell_subset=None):
-        """Median cells-per-protein — reference count for rescaling min_child_weight."""
         return int(np.median(_cells_per_protein(pairs, cell_subset)))
 
     _preview_counts = _cells_per_protein(usable, cell_train_global)
@@ -484,8 +477,6 @@ for CELLTYPE_NAME in CELL_TYPES_TO_RUN:
         model.save_model(os.path.join(MODEL_DIR, f"model_fold_{fold_i}.json"))
 
         def _predict_proteins(pairs, label):
-            """Predict each protein on held-out test cells; label='unknown' uses
-            protein_id=NaN (OOF zero-shot), label='known' uses the real id (in-fold)."""
             rows = []
             for feat, gene in pairs:
                 pid_val = np.nan if label == "unknown" else protein_id_map[feat]
@@ -562,7 +553,6 @@ for CELLTYPE_NAME in CELL_TYPES_TO_RUN:
     log.info("5. Computing statistics...")
 
     def _protein_stats(data):
-        """Per-protein r/R²/RMSE (raw & calibrated) + mean/SD across that protein's cells."""
         rows = []
         for prot, g in data.groupby("protein", observed=True):
             if len(g) < 3:
@@ -584,7 +574,6 @@ for CELLTYPE_NAME in CELL_TYPES_TO_RUN:
         return pd.DataFrame(rows)
 
     def _cell_stats(data):
-        """Per-cell Pearson r, R², Spearman r across all proteins in each cell (≥5 needed)."""
         rows = []
         for cid, g in data.groupby("cell_id", observed=True):
             if len(g) < 5:
@@ -637,8 +626,6 @@ for CELLTYPE_NAME in CELL_TYPES_TO_RUN:
     log.info("6. Generating plots...")
 
     def _make_plots(data, tag):
-        """Write OOF-unknown scatter + per-cell r/R² boxplots for one subset
-        (tag = 'filtered'/'unfiltered'), raw and calibrated, for this cell type."""
         tag_dir = os.path.join(PLOT_DIR, tag)
         for p_type in ["raw", "cal"]:
             p_col  = f"y_pred_{p_type}"

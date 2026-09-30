@@ -22,9 +22,9 @@ matplotlib.use('Agg')  # Use non-interactive backend to avoid GDI object limits
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pathlib import Path
-import scipy.sparse as sp
-from scipy.io import mmread
 import anndata as ad
+import h5py
+import scipy.sparse as sp
 import gc
 
 # Set plotting parameters
@@ -35,19 +35,10 @@ sc.settings.set_figure_params(dpi=100, facecolor='white')
 # CONFIGURATION
 # ============================================================================
 
-# Input: Kotliarov 2020 CITE-seq PBMC dataset (H1 day0 demultiplexed singlets).
-# The legacy Seurat v2 .RDS was exported once to plain interchange files by
-# 0.export_rds_to_mtx.R (run that first). We load those here in pure Python so
-# no embedded-R / rpy2 session runs alongside scanpy/scrublet.
-INPUT_DIR = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/Input/exported")
+INPUT_FILE = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/Output/0.Raw/H1_day0.h5ad")
 
-OUTPUT_DIR = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/1.QC+doublet_detection")
+OUTPUT_DIR = Path("C:/Users/Paul/Desktop/Publications/CITE-SEQ_pred/Annotation/Kotliarov/Output/1.QC+doublet_detection")
 FIGURES_DIR = OUTPUT_DIR / "figures" / "qc"
-
-# Metadata column to treat as the biological "sample" (used for per-sample
-# doublet detection and, later, batch correction). 'sample' = donor x timepoint
-# (20 donors, all at day 0).
-SAMPLE_KEY = "sample"
 
 # Create output directories
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -55,7 +46,7 @@ FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
 # QC thresholds
 MIN_GENES = 200
-MAX_GENES = 6000
+MAX_GENES =  6000
 MAX_PCT_MITO = 10  # percentage
 MIN_CELLS_PER_GENE = 3
 MIN_CELLS_PER_SAMPLE = 100
@@ -67,93 +58,229 @@ EXPECTED_DOUBLET_RATE = 0.06  # 6% for 10X data
 # PHASE 1: LOAD DATA
 # ============================================================================
 
-def _read_mtx_feats(mtx_path, feat_path):
-    """Read a MatrixMarket file (features x cells) plus its feature-name list and
-    return a CSR matrix of shape (cells, features) in float32, with feature names."""
-    mat = mmread(str(mtx_path)).tocsc().astype(np.float32)  # features x cells
-    with open(feat_path, encoding='utf-8') as fh:
-        feats = [ln.strip() for ln in fh if ln.strip()]
-    return mat.T.tocsr(), feats  # -> (cells, features)
-
-
-def load_and_merge_data():
-    """Load the exported Kotliarov matrices (RNA + ADT) and metadata in pure
-    Python: RNA raw counts as X, cell metadata into obs, and the CITE-seq protein
-    assay into obsm so it is carried through the whole pipeline."""
+def load_h5seurat(filepath):
+    """Load an .h5seurat file (produced by SeuratDisk) into an AnnData object."""
 
     print("\n" + "="*80)
     print("LOADING DATA")
     print("="*80)
-    print(f"\nReading exported matrices from: {INPUT_DIR}")
-    print("This may take a few minutes for large datasets...")
+    print(f"\nLoading .h5seurat file: {filepath}")
 
-    # Shared cell barcodes (column order of both exported matrices)
-    with open(INPUT_DIR / "barcodes.tsv", encoding='utf-8') as fh:
-        cells = [ln.strip() for ln in fh if ln.strip()]
+    with h5py.File(filepath, 'r') as f:
 
-    # ----------------------------------------------------------------------------
-    # RNA assay -> AnnData.X (raw counts for the QC pipeline)
-    # ----------------------------------------------------------------------------
-    print("\nLoading RNA assay (raw counts)...")
-    X, genes = _read_mtx_feats(INPUT_DIR / "rna_counts.mtx",
-                               INPUT_DIR / "rna_genes.tsv")
-    adata = ad.AnnData(X=X)
-    adata.var_names = genes
-    adata.obs_names = cells
+        # ----------------------------------------------------------------
+        # Inspect top-level structure
+        # ----------------------------------------------------------------
+        print(f"\nTop-level keys: {list(f.keys())}")
+
+        # ----------------------------------------------------------------
+        # Cell barcodes
+        # ----------------------------------------------------------------
+        if 'cell.names' in f:
+            cell_names = [x.decode('utf-8') if isinstance(x, bytes) else x
+                          for x in f['cell.names'][:]]
+        elif 'obs_names' in f:
+            cell_names = [x.decode('utf-8') if isinstance(x, bytes) else x
+                          for x in f['obs_names'][:]]
+        else:
+            raise KeyError("Cannot find cell barcodes in h5seurat file (tried 'cell.names', 'obs_names')")
+        print(f"Cells found: {len(cell_names)}")
+
+        # ----------------------------------------------------------------
+        # Count matrix — prefer SCT (SCTransform), then RNA, GEX, Spatial
+        # ADT is excluded here; it is loaded separately below
+        # ----------------------------------------------------------------
+        assays = list(f.get('assays', {}).keys())
+        print(f"Assays available: {assays}")
+
+        rna_candidates = ['SCT', 'RNA', 'GEX', 'Spatial']
+        assay_name = None
+        for candidate in rna_candidates:
+            if candidate in assays:
+                assay_name = candidate
+                break
+        # Fall back to first non-ADT assay
+        if assay_name is None:
+            for a in assays:
+                if a not in ('ADT', 'Antibody Capture', 'CITE'):
+                    assay_name = a
+                    break
+        if assay_name is None:
+            raise KeyError("No transcriptomics assay found in h5seurat file")
+        print(f"Using transcriptomics assay: {assay_name}")
+
+        assay_grp = f[f'assays/{assay_name}']
+        print(f"  Assay keys: {list(assay_grp.keys())}")
+
+        # Prefer 'counts' slot; fall back to 'data'
+        matrix_slot = None
+        for slot in ['counts', 'data']:
+            if slot in assay_grp:
+                matrix_slot = slot
+                break
+        if matrix_slot is None:
+            raise KeyError(f"No 'counts' or 'data' slot in assay '{assay_name}'")
+        print(f"  Using matrix slot: {matrix_slot}")
+
+        mat_grp = assay_grp[matrix_slot]
+
+        # Seurat stores sparse matrices as CSC with shape (genes × cells):
+        #   indptr length - 1  = n_cells  (CSC columns)
+        #   max(indices) + 1   = n_genes  (CSC rows)
+        rna_data    = mat_grp['data'][:]
+        rna_indices = mat_grp['indices'][:]
+        rna_indptr  = mat_grp['indptr'][:]
+        n_cells_csc = len(rna_indptr) - 1          # columns = cells
+        n_genes_csc = int(rna_indices.max()) + 1   # rows    = genes
+
+        matrix_csc = sp.csc_matrix(
+            (rna_data, rna_indices, rna_indptr),
+            shape=(n_genes_csc, n_cells_csc)        # genes × cells
+        )
+        # Transpose → cells × genes (CSR for downstream scanpy)
+        matrix_csr = matrix_csc.T.tocsr().astype(np.float32)
+        print(f"  Matrix shape (cells × genes): {matrix_csr.shape}")
+
+        # ----------------------------------------------------------------
+        # Gene / feature names
+        # ----------------------------------------------------------------
+        gene_names = None
+        for path in [f'assays/{assay_name}/features',
+                     f'assays/{assay_name}/var.names',
+                     'var.names', 'var/name']:
+            if path in f:
+                gene_names = [x.decode('utf-8') if isinstance(x, bytes) else x
+                              for x in f[path][:]]
+                print(f"  Gene names from: {path}  ({len(gene_names)} genes)")
+                break
+        if gene_names is None:
+            raise KeyError("Cannot find gene/feature names in h5seurat file")
+
+        # ----------------------------------------------------------------
+        # ADT assay (CITE-seq antibody-derived tags)
+        # ----------------------------------------------------------------
+        adt_matrix = None
+        adt_names  = None
+        for adt_key in ['ADT', 'Antibody Capture', 'CITE']:
+            if adt_key in assays:
+                print(f"\nLoading ADT assay: '{adt_key}'")
+                adt_grp = f[f'assays/{adt_key}']
+                print(f"  ADT assay keys: {list(adt_grp.keys())}")
+
+                # Prefer raw counts slot
+                adt_slot = None
+                for slot in ['counts', 'data']:
+                    if slot in adt_grp:
+                        adt_slot = slot
+                        break
+                if adt_slot is None:
+                    print(f"  WARNING: No 'counts' or 'data' slot in ADT assay — skipping")
+                    break
+
+                adt_mat_grp  = adt_grp[adt_slot]
+                adt_data     = adt_mat_grp['data'][:]
+                adt_indices  = adt_mat_grp['indices'][:]
+                adt_indptr   = adt_mat_grp['indptr'][:]
+                n_cells_adt  = len(adt_indptr) - 1          # CSC columns = cells
+                n_proteins   = int(adt_indices.max()) + 1   # CSC rows    = proteins
+
+                adt_csc = sp.csc_matrix(
+                    (adt_data, adt_indices, adt_indptr),
+                    shape=(n_proteins, n_cells_adt)         # proteins × cells
+                )
+                # Transpose to cells × proteins, convert to dense DataFrame
+                adt_matrix = np.array(adt_csc.T.toarray(), dtype=np.float32)
+                print(f"  ADT matrix shape (cells × proteins): {adt_matrix.shape}")
+
+                # Protein names
+                for path in [f'assays/{adt_key}/features',
+                             f'assays/{adt_key}/var.names']:
+                    if path in f:
+                        adt_names = [x.decode('utf-8') if isinstance(x, bytes) else x
+                                     for x in f[path][:]]
+                        print(f"  Protein names from: {path}  ({len(adt_names)} proteins)")
+                        break
+                if adt_names is None:
+                    adt_names = [f'protein_{i}' for i in range(n_proteins)]
+                    print(f"  WARNING: Protein names not found; using generic labels")
+                break
+        else:
+            print("\nNo ADT assay found (tried 'ADT', 'Antibody Capture', 'CITE')")
+
+        # ----------------------------------------------------------------
+        # Cell metadata
+        # ----------------------------------------------------------------
+        meta_dict = {}
+        if 'meta.data' in f:
+            for col in f['meta.data'].keys():
+                vals = f[f'meta.data/{col}'][:]
+                if vals.dtype.kind in ('S', 'O'):   # byte strings
+                    vals = [v.decode('utf-8') if isinstance(v, bytes) else v
+                            for v in vals]
+                meta_dict[col] = vals
+        obs_df = pd.DataFrame(meta_dict, index=cell_names)
+        print(f"\nMetadata columns: {list(obs_df.columns)}")
+
+    # ----------------------------------------------------------------
+    # Build AnnData (cells × genes)
+    # ----------------------------------------------------------------
+    adata = ad.AnnData(X=matrix_csr)
+    adata.obs_names = cell_names
+    adata.var_names = gene_names
     adata.var_names_make_unique()
-    print(f"  RNA matrix: {adata.n_obs} cells x {adata.n_vars} genes")
+    adata.obs = obs_df.reindex(adata.obs_names)
 
-    # ----------------------------------------------------------------------------
-    # Cell metadata -> obs (CSV indexed by barcode)
-    # ----------------------------------------------------------------------------
-    print("\nLoading cell metadata...")
-    obs_df = pd.read_csv(INPUT_DIR / "metadata.csv", index_col=0)
-    obs_df = obs_df.reindex(adata.obs_names)  # align to matrix cell order
-    adata.obs = obs_df
-    print(f"  Loaded {len(obs_df.columns)} metadata columns: {list(obs_df.columns)}")
-
-    # ----------------------------------------------------------------------------
-    # CITE-seq protein assay -> obsm (raw counts)
-    # Stored as a DataFrame so protein names are preserved and the matrix is
-    # automatically subset alongside cells during QC / doublet filtering.
-    # ----------------------------------------------------------------------------
-    print("\nLoading ADT assay (CITE-seq protein)...")
-    adt_X, prot_names = _read_mtx_feats(INPUT_DIR / "adt_counts.mtx",
-                                        INPUT_DIR / "adt_features.tsv")
-    adata.obsm['protein_counts'] = pd.DataFrame(
-        adt_X.toarray(), index=adata.obs_names, columns=prot_names)
-    print(f"  ADT matrix: {adata.n_obs} cells x {len(prot_names)} proteins "
-          f"(stored in obsm['protein_counts'])")
-
-    gc.collect()
-
-    # ----------------------------------------------------------------------------
-    # Define the 'sample' column used downstream
-    # ----------------------------------------------------------------------------
-    if SAMPLE_KEY in adata.obs.columns:
-        adata.obs['sample'] = adata.obs[SAMPLE_KEY].astype(str)
-        print(f"\nUsing '{SAMPLE_KEY}' as 'sample' column for downstream analysis")
+    # Store ADT counts as obsm['ADT'] — standard CITE-seq convention in scanpy
+    if adt_matrix is not None and adt_names is not None:
+        adata.obsm['ADT'] = pd.DataFrame(
+            adt_matrix,
+            index=adata.obs_names,
+            columns=adt_names
+        )
+        print(f"\nADT stored in adata.obsm['ADT']: {adata.obsm['ADT'].shape}")
     else:
-        adata.obs['sample'] = 'Kotliarov_PBMC'
-        print(f"\nWARNING: '{SAMPLE_KEY}' not found, using single sample 'Kotliarov_PBMC'")
+        print("\nWARNING: ADT data not loaded — adata.obsm['ADT'] will not be present")
 
-    print("\nSample distribution:")
-    sample_counts = adata.obs['sample'].value_counts().sort_index()
-    if len(sample_counts) > 20:
-        print(sample_counts.head(20))
-        print(f"... and {len(sample_counts) - 20} more samples")
+    print(f"\nAnnData created: {adata.n_obs} cells × {adata.n_vars} genes")
+
+    # ----------------------------------------------------------------
+    # Resolve 'sample' column
+    # ----------------------------------------------------------------
+    sample_candidates = ['orig.ident', 'sample', 'Sample', 'batch',
+                         'sample_id', 'donor', 'patient']
+    sample_col = None
+    for col in sample_candidates:
+        if col in adata.obs.columns:
+            sample_col = col
+            break
+
+    if sample_col:
+        adata.obs['sample'] = adata.obs[sample_col].astype(str)
+        print(f"Using '{sample_col}' as 'sample' column")
     else:
-        print(sample_counts)
+        print("WARNING: No recognisable sample/batch column found; treating as single sample")
+        adata.obs['sample'] = 'Hao_multi'
 
-    print("\n" + "-"*80)
-    print(f"Total cells: {adata.n_obs}")
-    print(f"Total genes: {adata.n_vars}")
-    print(f"Total samples: {adata.obs['sample'].nunique()}")
+    print(f"Unique samples: {adata.obs['sample'].nunique()}")
+    print(f"Final metadata columns: {list(adata.obs.columns)}")
 
     return adata
 
-# Load data using the fast loading function
-adata = load_and_merge_data()
+# Load data from .h5ad
+adata = sc.read_h5ad(INPUT_FILE)
+
+# Resolve 'sample' column
+sample_candidates = ['sampleid', 'orig.ident', 'sample', 'Sample', 'batch', 'sample_id', 'donor', 'patient']
+sample_col = next((c for c in sample_candidates if c in adata.obs.columns), None)
+if sample_col:
+    adata.obs['sample'] = adata.obs[sample_col].astype(str)
+    print(f"Using '{sample_col}' as 'sample' column")
+else:
+    print("WARNING: No recognisable sample/batch column found; treating as single sample")
+    adata.obs['sample'] = 'H1_day0'
+
+print(f"Unique samples: {adata.obs['sample'].nunique()}")
+print(f"Loaded: {adata.n_obs} cells × {adata.n_vars} genes")
 
 # ============================================================================
 # PHASE 2: QUALITY CONTROL
@@ -466,6 +593,23 @@ if len(valid_samples_final) < len(sample_counts_final):
 print("\n" + "="*80)
 print("SAVING RESULTS")
 print("="*80)
+
+# Sanitise obs columns before writing:
+#   1. '_index' is reserved by anndata's h5ad writer — rename it
+#   2. object-dtype columns may contain byte strings from h5py — cast to str
+reserved = {'_index'}
+rename_map = {col: col.lstrip('_') + '_orig'
+              for col in adata.obs.columns if col in reserved}
+if rename_map:
+    print(f"Renaming reserved obs columns: {rename_map}")
+    adata.obs.rename(columns=rename_map, inplace=True)
+
+for col in adata.obs.columns:
+    s = adata.obs[col]
+    if s.dtype == object:
+        adata.obs[col] = s.map(
+            lambda v: v.decode('utf-8') if isinstance(v, bytes) else v
+        ).astype(str)
 
 # Save filtered data
 output_file = OUTPUT_DIR / "adata_qc_filtered.h5ad"
